@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JC-62 Processor Simulator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
+    <style>
+        .register {
+            background-color: #f5deb3;
+        }
+    </style>
+</head>
+
+<body class="bg-green-700 p-4">
+    <div class="container mx-auto grid grid-cols-12 gap-4">
+        <!-- Code Editor Section -->
+        <div class="col-span-4 bg-blue-900 p-4 rounded-lg">
+            <textarea id="codeEditor" class="w-full h-96 p-2 font-mono text-lg"></textarea>
+            <button id="submitCode" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded">Submit Code</button>
+        </div>
+
+        <!-- RAM Section -->
+        <div class="col-span-3 bg-blue-900 p-4 rounded-lg">
+            <h2 class="text-white text-xl mb-4">RAM</h2>
+            <div class="bg-white p-2 rounded">
+                <table id="ramTable" class="w-full">
+                    <thead>
+                        <tr>
+                            <th>Address</th>
+                            <th>Label</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="mt-4 grid grid-cols-3 gap-2">
+                <input type="text" id="ramAddress" placeholder="Address" class="p-1">
+                <input type="text" id="ramLabel" placeholder="Label" class="p-1">
+                <input type="text" id="ramValue" placeholder="Value" class="p-1">
+            </div>
+            <button id="setRam" class="mt-2 bg-blue-500 text-white px-4 py-2 rounded w-full">Set RAM</button>
+        </div>
+
+        <!-- Registers Section -->
+        <div class="col-span-5 bg-blue-900 p-4 rounded-lg">
+            <h2 class="text-white text-xl mb-4">Registers</h2>
+            <div class="grid grid-cols-3 gap-4">
+                <div class="register p-2 rounded">
+                    <h3>PC</h3>
+                    <div id="pc" class="text-xl"></div>
+                </div>
+                <div class="register p-2 rounded">
+                    <h3>ACC</h3>
+                    <div id="acc" class="text-xl"></div>
+                </div>
+                <div class="register p-2 rounded">
+                    <h3>B</h3>
+                    <div id="b" class="text-xl"></div>
+                </div>
+                <div class="register p-2 rounded">
+                    <h3>MAR</h3>
+                    <div id="mar" class="text-xl"></div>
+                </div>
+                <div class="register p-2 rounded">
+                    <h3>MDR</h3>
+                    <div id="mdr" class="text-xl"></div>
+                </div>
+                <div class="register p-2 rounded">
+                    <h3>IR</h3>
+                    <div id="ir" class="text-xl"></div>
+                </div>
+                <div class="register p-2 rounded">
+                    <h3>NF</h3>
+                    <div id="nf" class="text-xl"></div>
+                </div>
+            </div>
+            <div class="mt-4">
+                <div class="register p-2 rounded mb-2">
+                    <h3>Instruction</h3>
+                    <div id="instruction" class="whitespace-pre-line"></div>
+                </div>
+                <div class="register p-2 rounded">
+                    <h3>Comments</h3>
+                    <div id="comments" class="whitespace-pre-line"></div>
+                </div>
+            </div>
+            <div class="mt-4 grid grid-cols-3 gap-4">
+                <button id="step" class="bg-blue-500 text-white px-4 py-2 rounded">Step</button>
+                <button id="run" class="bg-blue-500 text-white px-4 py-2 rounded">Run All</button>
+                <button id="reset" class="bg-red-500 text-white px-4 py-2 rounded">Reset</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initialize RAM table
+            const ramTable = document.getElementById('ramTable').getElementsByTagName('tbody')[0];
+            for (let i = 0; i < 256; i++) {
+                const addr = i.toString(16).toUpperCase().padStart(2, '0');
+                const row = ramTable.insertRow();
+                row.insertCell(0).textContent = addr;
+                row.insertCell(1).textContent = 'NULL';
+                row.insertCell(2).textContent = 'NULL';
+            }
+
+            // Event Listeners
+            document.getElementById('submitCode').addEventListener('click', submitCode);
+            document.getElementById('step').addEventListener('click', step);
+            document.getElementById('run').addEventListener('click', runAll);
+            document.getElementById('reset').addEventListener('click', reset);
+            document.getElementById('setRam').addEventListener('click', setRamValue);
+
+            // Functions
+            async function submitCode() {
+                const code = document.getElementById('codeEditor').value;
+                const response = await fetch('/api/submit-code', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ code })
+                });
+                const data = await response.json();
+                updateUI({});
+            }
+
+            async function step() {
+                const response = await fetch('/api/step', {
+                    method: 'POST'
+                });
+                const data = await response.json();
+                if (!response.ok) {
+                    alert(data.error);
+                    return;
+                }
+                updateUI(data);
+            }
+
+            async function runAll() {
+                const response = await fetch('/api/run', {
+                    method: 'POST'
+                });
+                const data = await response.json();
+                if (!response.ok) {
+                    alert(data.error);
+                    return;
+                }
+                if (data.results.length > 0) {
+                    updateUI(data.results[data.results.length - 1]);
+                }
+            }
+
+            async function reset() {
+                await fetch('/api/reset', {
+                    method: 'POST'
+                });
+                updateUI({
+                    pc: '', acc: '', b: '', mar: '', mdr: '', ir: '', nf: '',
+                    comments: '', instruction: ''
+                });
+                // Reset RAM table
+                const rows = ramTable.getElementsByTagName('tr');
+                for (let row of rows) {
+                    row.cells[1].textContent = 'NULL';
+                    row.cells[2].textContent = 'NULL';
+                }
+            }
+            async function setRamValue() {
+                const address = document.getElementById('ramAddress').value;
+                const label = document.getElementById('ramLabel').value;
+                const value = document.getElementById('ramValue').value;
+
+                const response = await fetch('/api/set-ram', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ address, label, value })
+                });
+
+                if (!response.ok) {
+                    alert('Failed to set RAM value');
+                    return;
+                }
+
+                // Update RAM table
+                const rows = ramTable.getElementsByTagName('tr');
+                for (let row of rows) {
+                    if (row.cells[0].textContent === address) {
+                        row.cells[1].textContent = label;
+                        row.cells[2].textContent = value;
+                        break;
+                    }
+                }
+            }
+
+            function updateUI(data) {
+                // Update registers
+                document.getElementById('pc').textContent = data.pc || '';
+                document.getElementById('acc').textContent = data.acc || '';
+                document.getElementById('b').textContent = data.b || '';
+                document.getElementById('mar').textContent = data.mar || '';
+                document.getElementById('mdr').textContent = data.mdr || '';
+                document.getElementById('ir').textContent = data.ir || '';
+                document.getElementById('nf').textContent = data.nf || '';
+                document.getElementById('instruction').textContent = data.instruction || '';
+                document.getElementById('comments').textContent = data.comments || '';
+
+
+                // Update RAM if provided
+                if (data.ram) {
+                    const rows = ramTable.getElementsByTagName('tr');
+                    for (let row of rows) {
+                        const addr = row.cells[0].textContent;
+                        if (data.ram[addr]) {
+                            row.cells[1].textContent = data.ram[addr].label;
+                            row.cells[2].textContent = data.ram[addr].value;
+                        }
+                    }
+                }
+            }
+        });
+            </script>
+    </body>
+
+    </html>
