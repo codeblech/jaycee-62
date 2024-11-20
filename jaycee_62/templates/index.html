@@ -41,9 +41,9 @@
                 <table id="ramTable" class="w-full text-white">
                     <thead>
                         <tr>
-                            <th>Address</th>
-                            <th>Label</th>
-                            <th>Value</th>
+                            <th class="text-left px-4 py-2 w-1/4">Address</th>
+                            <th class="text-left px-4 py-2 w-1/3">Label</th>
+                            <th class="text-left px-4 py-2 w-1/3">Value</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -110,32 +110,31 @@
                 const addr = i.toString(16).toUpperCase().padStart(2, '0');
                 const row = ramTable.insertRow();
                 row.insertCell(0).textContent = addr;
+                row.cells[0].classList.add('px-4', 'py-1');
 
                 // Make label cell editable
                 const labelCell = row.insertCell(1);
                 labelCell.textContent = 'NULL';
                 labelCell.setAttribute('contenteditable', 'true');
-                labelCell.classList.add('cursor-pointer', 'hover:bg-gray-600', 'px-1', 'outline-none');
+                labelCell.classList.add('cursor-pointer', 'hover:bg-gray-600', 'px-4', 'py-1', 'outline-none');
 
                 // Make value cell editable
                 const valueCell = row.insertCell(2);
                 valueCell.textContent = 'NULL';
                 valueCell.setAttribute('contenteditable', 'true');
-                valueCell.classList.add('cursor-pointer', 'hover:bg-gray-600', 'px-1', 'outline-none');
+                valueCell.classList.add('cursor-pointer', 'hover:bg-gray-600', 'px-4', 'py-1', 'outline-none');
 
                 // Add event listeners for both cells
                 [labelCell, valueCell].forEach(cell => {
                     // Store original value when starting to edit
                     cell.addEventListener('focus', function() {
                         this.dataset.originalValue = this.textContent;
-                        if (this.textContent === 'NULL') {
-                            this.textContent = '';
-                        }
                     });
 
                     cell.addEventListener('blur', async function() {
                         let newValue = this.textContent.trim();
                         if (newValue === '') {
+                            this.textContent = 'NULL';
                             newValue = 'NULL';
                         }
 
