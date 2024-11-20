@@ -49,12 +49,6 @@
                     <tbody></tbody>
                 </table>
             </div>
-            <div class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-2">
-                <input type="text" id="ramAddress" placeholder="Address" class="p-1 bg-gray-700 text-white rounded">
-                <input type="text" id="ramLabel" placeholder="Label" class="p-1 bg-gray-700 text-white rounded">
-                <input type="text" id="ramValue" placeholder="Value" class="p-1 bg-gray-700 text-white rounded">
-            </div>
-            <button id="setRam" class="mt-2 bg-blue-600 text-white px-4 py-2 rounded w-full hover:bg-blue-700">Set RAM</button>
         </div>
 
         <!-- Registers Section -->
@@ -110,14 +104,117 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Initialize RAM table
+            // Modify RAM table initialization
             const ramTable = document.getElementById('ramTable').getElementsByTagName('tbody')[0];
             for (let i = 0; i < 256; i++) {
                 const addr = i.toString(16).toUpperCase().padStart(2, '0');
                 const row = ramTable.insertRow();
                 row.insertCell(0).textContent = addr;
-                row.insertCell(1).textContent = 'NULL';
-                row.insertCell(2).textContent = 'NULL';
+
+                // Make label cell editable
+                const labelCell = row.insertCell(1);
+                labelCell.textContent = 'NULL';
+                labelCell.setAttribute('contenteditable', 'true');
+                labelCell.classList.add('cursor-pointer', 'hover:bg-gray-600', 'px-1', 'outline-none');
+
+                // Make value cell editable
+                const valueCell = row.insertCell(2);
+                valueCell.textContent = 'NULL';
+                valueCell.setAttribute('contenteditable', 'true');
+                valueCell.classList.add('cursor-pointer', 'hover:bg-gray-600', 'px-1', 'outline-none');
+
+                // Add event listeners for both cells
+                [labelCell, valueCell].forEach(cell => {
+                    // Store original value when starting to edit
+                    cell.addEventListener('focus', function() {
+                        this.dataset.originalValue = this.textContent;
+                        if (this.textContent === 'NULL') {
+                            this.textContent = '';
+                        }
+                    });
+
+                    cell.addEventListener('blur', async function() {
+                        let newValue = this.textContent.trim();
+                        if (newValue === '') {
+                            newValue = 'NULL';
+                        }
+
+                        const row = this.parentElement;
+                        const address = row.cells[0].textContent;
+                        const label = row.cells[1].textContent;
+                        const value = row.cells[2].textContent;
+                        let isValid = true;
+
+                        // Validate value (hex number between 00 and FF)
+                        if (this === valueCell && newValue !== 'NULL') {
+                            const valueRegex = /^[0-9A-Fa-f]{1,2}$/;
+                            if (!valueRegex.test(newValue)) {
+                                alert('Value must be a hexadecimal number between 00 and FF');
+                                this.textContent = this.dataset.originalValue;
+                                isValid = false;
+                            } else {
+                                // Convert to decimal to check range
+                                const decimalValue = parseInt(newValue, 16);
+                                if (decimalValue < 0 || decimalValue > 255) {
+                                    alert('Value must be between 00 and FF');
+                                    this.textContent = this.dataset.originalValue;
+                                    isValid = false;
+                                } else {
+                                    // Pad with leading zero if necessary and convert to uppercase
+                                    this.textContent = newValue.toUpperCase().padStart(2, '0');
+                                }
+                            }
+                        }
+
+                        // Validate label (alphanumeric and underscore only)
+                        if (this === labelCell && newValue !== 'NULL') {
+                            const labelRegex = /^[a-zA-Z0-9_]+$/;
+                            if (!labelRegex.test(newValue)) {
+                                alert('Label must contain only letters, numbers, and underscores');
+                                this.textContent = this.dataset.originalValue;
+                                isValid = false;
+                            }
+                        }
+
+                        if (newValue === '') {
+                            this.textContent = 'NULL';
+                        }
+
+                        if (isValid && newValue !== this.dataset.originalValue) {
+                            try {
+                                const response = await fetch('/api/set-ram', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({
+                                        address,
+                                        label: label === 'NULL' ? '' : label,
+                                        value: value === 'NULL' ? '' : value
+                                    })
+                                });
+
+                                if (!response.ok) {
+                                    throw new Error('Failed to update RAM value');
+                                }
+                            } catch (error) {
+                                alert(error.message);
+                                this.textContent = this.dataset.originalValue;
+                            }
+                        }
+                    });
+
+                    // Handle keyboard events
+                    cell.addEventListener('keydown', function(e) {
+                        if (e.key === 'Escape') {
+                            this.textContent = this.dataset.originalValue;
+                            this.blur();
+                        } else if (e.key === 'Enter') {
+                            e.preventDefault();
+                            this.blur();
+                        }
+                    });
+                });
             }
 
             // Event Listeners
@@ -125,7 +222,6 @@
             document.getElementById('step').addEventListener('click', step);
             document.getElementById('run').addEventListener('click', runAll);
             document.getElementById('reset').addEventListener('click', reset);
-            document.getElementById('setRam').addEventListener('click', setRamValue);
 
             // Functions
             async function submitCode() {
@@ -180,34 +276,6 @@
                 for (let row of rows) {
                     row.cells[1].textContent = 'NULL';
                     row.cells[2].textContent = 'NULL';
-                }
-            }
-            async function setRamValue() {
-                const address = document.getElementById('ramAddress').value;
-                const label = document.getElementById('ramLabel').value;
-                const value = document.getElementById('ramValue').value;
-
-                const response = await fetch('/api/set-ram', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ address, label, value })
-                });
-
-                if (!response.ok) {
-                    alert('Failed to set RAM value');
-                    return;
-                }
-
-                // Update RAM table
-                const rows = ramTable.getElementsByTagName('tr');
-                for (let row of rows) {
-                    if (row.cells[0].textContent === address) {
-                        row.cells[1].textContent = label;
-                        row.cells[2].textContent = value;
-                        break;
-                    }
                 }
             }
 
