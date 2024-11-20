@@ -30,6 +30,66 @@
 </head>
 
 <body class="bg-gray-900 p-4">
+    <button id="helpButton" class="fixed top-4 right-4 bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+    </button>
+
+    <div id="helpModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
+        <div class="bg-gray-800 p-6 rounded-lg max-w-4xl max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-white text-2xl font-bold">JC-62 Processor Simulator Help</h2>
+                <button id="closeHelp" class="text-gray-400 hover:text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="text-white space-y-6">
+                <section>
+                    <h3 class="text-xl font-semibold mb-2">Registers</h3>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li><strong>PC (Program Counter):</strong> Contains the address of the next instruction to be executed</li>
+                        <li><strong>ACC (Accumulator):</strong> Main register for arithmetic and logical operations</li>
+                        <li><strong>B Register:</strong> Secondary register used in arithmetic operations</li>
+                        <li><strong>MAR (Memory Address Register):</strong> Holds the address for memory operations</li>
+                        <li><strong>MDR (Memory Data Register):</strong> Holds data being read from or written to memory</li>
+                        <li><strong>IR (Instruction Register):</strong> Holds the current instruction being executed</li>
+                        <li><strong>NF (Negative Flag):</strong> Set to 1 if the last operation resulted in a negative value</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3 class="text-xl font-semibold mb-2">RAM</h3>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li>256 memory locations (00-FF in hexadecimal)</li>
+                        <li>Each location can store a value from 00-FF (0-255 in decimal)</li>
+                        <li>Labels can contain letters, numbers, and underscores</li>
+                        <li>Click on any cell to edit values or labels</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3 class="text-xl font-semibold mb-2">Controls</h3>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li><strong>Step:</strong> Execute one instruction</li>
+                        <li><strong>Run All:</strong> Execute all instructions until completion</li>
+                        <li><strong>Reset:</strong> Clear all registers and return to initial state</li>
+                        <li><strong>Submit Code:</strong> Load the code from the editor into memory</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3 class="text-xl font-semibold mb-2">Sample Programs</h3>
+                    <p>Use the dropdown menu to load pre-written example programs. Each sample includes:</p>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li>Assembly code loaded into the editor</li>
+                        <li>Pre-configured RAM values and labels</li>
+                        <li>Documentation within the code</li>
+                    </ul>
+                </section>
+            </div>
+        </div>
+    </div>
+
     <div class="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4">
         <!-- Code Editor Section -->
         <div class="col-span-1 lg:col-span-4 bg-gray-800 p-4 rounded-lg">
@@ -423,8 +483,35 @@
                     }
                 }
             }
-        });
-            </script>
-    </body>
 
-    </html>
+            // Help modal functionality
+            const helpButton = document.getElementById('helpButton');
+            const helpModal = document.getElementById('helpModal');
+            const closeHelp = document.getElementById('closeHelp');
+
+            helpButton.addEventListener('click', () => {
+                helpModal.classList.remove('hidden');
+            });
+
+            closeHelp.addEventListener('click', () => {
+                helpModal.classList.add('hidden');
+            });
+
+            // Close modal when clicking outside
+            helpModal.addEventListener('click', (e) => {
+                if (e.target === helpModal) {
+                    helpModal.classList.add('hidden');
+                }
+            });
+
+            // Close modal with Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && !helpModal.classList.contains('hidden')) {
+                    helpModal.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
