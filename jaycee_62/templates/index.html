@@ -163,11 +163,27 @@
                     <div id="comments" class="whitespace-pre-line"></div>
                 </div>
             </div>
-            <div class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="mt-4 grid grid-cols-1 sm:grid-cols-4 gap-4">
                 <button id="step" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Step</button>
                 <button id="run" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Run All</button>
                 <button id="reset" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Reset</button>
+                <button id="aiAssist" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">AI Help</button>
             </div>
+        </div>
+    </div>
+
+    <!-- Add AI explanation modal -->
+    <div id="aiModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
+        <div class="bg-gray-800 p-6 rounded-lg max-w-4xl max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-white text-2xl font-bold">AI Analysis</h2>
+                <button id="closeAi" class="text-gray-400 hover:text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div id="aiExplanation" class="text-white whitespace-pre-line"></div>
         </div>
     </div>
 
@@ -177,6 +193,7 @@
             let lastSavedCode = '';
             const codeEditor = document.getElementById('codeEditor');
             const unsavedIndicator = document.getElementById('unsavedIndicator');
+            const executionHistory = [];
 
             codeEditor.addEventListener('input', function() {
                 if (this.value !== lastSavedCode) {
@@ -380,6 +397,31 @@
             document.getElementById('step').addEventListener('click', step);
             document.getElementById('run').addEventListener('click', runAll);
             document.getElementById('reset').addEventListener('click', reset);
+            document.getElementById('aiAssist').addEventListener('click', async function() {
+                const code = document.getElementById('codeEditor').value;
+
+                try {
+                    const response = await fetch('/api/ai-assist', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            code: code,
+                            history: executionHistory
+                        })
+                    });
+
+                    const data = await response.json();
+                    if (!response.ok) throw new Error(data.error);
+
+                    document.getElementById('aiExplanation').textContent = data.explanation;
+                    document.getElementById('aiModal').classList.remove('hidden');
+
+                } catch (error) {
+                    alert('Error getting AI assistance: ' + error.message);
+                }
+            });
 
             // Functions
             async function submitCode() {
@@ -406,6 +448,20 @@
                     alert(data.error);
                     return;
                 }
+
+                // Record step in history
+                executionHistory.push({
+                    pc: data.pc,
+                    acc: data.acc,
+                    b: data.b,
+                    mar: data.mar,
+                    mdr: data.mdr,
+                    ir: data.ir,
+                    nf: data.nf,
+                    instruction: data.instruction,
+                    comments: data.comments
+                });
+
                 updateUI(data);
             }
 
@@ -508,6 +564,17 @@
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape' && !helpModal.classList.contains('hidden')) {
                     helpModal.classList.add('hidden');
+                }
+            });
+
+            // Add modal close handlers
+            document.getElementById('closeAi').addEventListener('click', () => {
+                document.getElementById('aiModal').classList.add('hidden');
+            });
+
+            document.getElementById('aiModal').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('aiModal')) {
+                    document.getElementById('aiModal').classList.add('hidden');
                 }
             });
         });
