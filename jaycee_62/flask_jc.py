@@ -3,13 +3,9 @@ from processor import ProcessorSimulator
 import google.generativeai as genai
 import os
 from dotenv import load_dotenv
+from functools import lru_cache
 
-PRODUCTION_ENV_PATH = "/home/codeblech/jaycee-62/jaycee-62/.env"
-
-if os.path.exists(PRODUCTION_ENV_PATH):
-    load_dotenv(PRODUCTION_ENV_PATH)
-else:
-    load_dotenv()
+load_dotenv()
 
 app = Flask(__name__)
 simulator = ProcessorSimulator()
@@ -79,20 +75,17 @@ def set_ram():
     return jsonify({"message": "RAM value set successfully"})
 
 
-@app.route("/api/ai-assist", methods=["POST"])
-def ai_assist():
-    try:
-        code = request.json.get("code", "")
-        execution_history = request.json.get("history", [])
-
-        prompt = f"""You are an educational assistant helping students understand assembly code execution.
+# Add cache for AI analysis
+@lru_cache(maxsize=100)  # Cache up to 100 different code analyses
+def get_ai_analysis(code: str, history_str: str):
+    prompt = f"""You are an educational assistant helping students understand assembly code execution.
 Please provide your analysis in proper markdown format.
 
 Code submitted:
 {code}
 
 Execution history:
-{execution_history}
+{history_str}
 
 Please provide a detailed analysis including:
 
@@ -127,9 +120,22 @@ Please provide a detailed analysis including:
 - Assembly programming tips
 
 Please use code blocks, tables, and bullet points where appropriate to make the explanation clear and structured."""
+    response = model.generate_content(prompt)
+    return response.text
 
-        response = model.generate_content(prompt)
-        return jsonify({"explanation": response.text})
+
+@app.route("/api/ai-assist", methods=["POST"])
+def ai_assist():
+    try:
+        code = request.json.get("code", "")
+        execution_history = request.json.get("history", [])
+
+        # Convert history to string for caching (lists aren't hashable)
+        history_str = str(execution_history)
+
+        # Get cached or new analysis
+        explanation = get_ai_analysis(code, history_str)
+        return jsonify({"explanation": explanation})
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 
