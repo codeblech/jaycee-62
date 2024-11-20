@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "jaycee-62"
+name = "jaycee_62"
 version = "0.1.0"
 description = ""
 authors = ["codeblech <my.malikyash@gmail.com>"]
