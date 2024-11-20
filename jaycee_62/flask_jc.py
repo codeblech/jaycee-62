@@ -4,7 +4,12 @@ import google.generativeai as genai
 import os
 from dotenv import load_dotenv
 
-load_dotenv()
+PRODUCTION_ENV_PATH = "/home/codeblech/jaycee-62/jaycee-62/.env"
+
+if os.path.exists(PRODUCTION_ENV_PATH):
+    load_dotenv(PRODUCTION_ENV_PATH)
+else:
+    load_dotenv()
 
 app = Flask(__name__)
 simulator = ProcessorSimulator()
