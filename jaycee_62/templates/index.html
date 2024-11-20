@@ -33,7 +33,7 @@
     <div class="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4">
         <!-- Code Editor Section -->
         <div class="col-span-1 lg:col-span-4 bg-gray-800 p-4 rounded-lg">
-            <h2 class="text-white text-xl mb-4">Code Editor</h2>
+            <h2 class="text-white text-xl mb-4">Code Editor <span id="unsavedIndicator" class="text-yellow-400 text-sm hidden">*unsaved changes</span></h2>
             <div class="mb-4">
                 <select id="sampleCodeSelect" class="w-full p-2 bg-gray-700 text-white rounded">
                     <option value="">Select a sample program...</option>
@@ -113,6 +113,19 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            // Add this near the top of the DOMContentLoaded handler
+            let lastSavedCode = '';
+            const codeEditor = document.getElementById('codeEditor');
+            const unsavedIndicator = document.getElementById('unsavedIndicator');
+
+            codeEditor.addEventListener('input', function() {
+                if (this.value !== lastSavedCode) {
+                    unsavedIndicator.classList.remove('hidden');
+                } else {
+                    unsavedIndicator.classList.add('hidden');
+                }
+            });
+
             // Load sample codes
             fetch('/static/sample_codes.json')
                 .then(response => response.json())
@@ -130,9 +143,20 @@
                         if (this.value === '') return;
 
                         const sample = sampleCodes[this.value];
+                        const newCode = sample.program.join('\n');
 
-                        // Set code in editor
-                        document.getElementById('codeEditor').value = sample.program.join('\n');
+                        // Check if there are unsaved changes before loading new sample
+                        if (codeEditor.value !== lastSavedCode) {
+                            if (!confirm('You have unsaved changes. Load sample program anyway?')) {
+                                this.value = ''; // Reset select to empty if user cancels
+                                return;
+                            }
+                        }
+
+                        // Set code in editor and update saved state
+                        codeEditor.value = newCode;
+                        lastSavedCode = codeEditor.value;
+                        unsavedIndicator.classList.remove('hidden');
 
                         try {
                             // Reset RAM first
@@ -308,6 +332,8 @@
                     body: JSON.stringify({ code })
                 });
                 const data = await response.json();
+                lastSavedCode = code; // Update saved code
+                unsavedIndicator.classList.add('hidden'); // Hide indicator
                 updateUI({});
             }
 
@@ -341,6 +367,8 @@
                 await fetch('/api/reset', {
                     method: 'POST'
                 });
+                lastSavedCode = codeEditor.value; // Update saved code
+                unsavedIndicator.classList.add('hidden'); // Hide indicator
                 updateUI({
                     pc: '', acc: '', b: '', mar: '', mdr: '', ir: '', nf: '',
                     comments: '', instruction: ''
