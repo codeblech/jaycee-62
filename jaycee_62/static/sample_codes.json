@@ -1,0 +1,298 @@
+[
+    {
+        "programName": "Add Two Numbers",
+        "program": [
+            "LDA A",
+            "MBA",
+            "LDA B",
+            "ADD",
+            "STA SUM",
+            "HLT"
+        ],
+        "ramSetup": [
+            {
+                "address": "00",
+                "label": "A",
+                "value": "05"
+            },
+            {
+                "address": "01",
+                "label": "B",
+                "value": "03"
+            },
+            {
+                "address": "02",
+                "label": "SUM",
+                "value": "00"
+            }
+        ]
+    },
+    {
+        "programName": "Subtract Two Numbers",
+        "program": [
+            "LDA A",
+            "MBA",
+            "LDA B",
+            "SUB",
+            "STA DIFF",
+            "HLT"
+        ],
+        "ramSetup": [
+            {
+                "address": "00",
+                "label": "A",
+                "value": "08"
+            },
+            {
+                "address": "01",
+                "label": "B",
+                "value": "03"
+            },
+            {
+                "address": "02",
+                "label": "DIFF",
+                "value": "00"
+            }
+        ]
+    },
+    {
+        "programName": "Find the Absolute Difference",
+        "program": [
+            "LDA A",
+            "MBA",
+            "LDA B",
+            "SUB",
+            "JN NEGATIVE",
+            "STA RESULT",
+            "HLT",
+            "NEGATIVE:",
+            "LDA B",
+            "MBA",
+            "LDA A",
+            "SUB",
+            "STA RESULT",
+            "HLT"
+        ],
+        "ramSetup": [
+            {
+                "address": "00",
+                "label": "A",
+                "value": "04"
+            },
+            {
+                "address": "01",
+                "label": "B",
+                "value": "09"
+            },
+            {
+                "address": "02",
+                "label": "RESULT",
+                "value": "00"
+            }
+        ]
+    },
+    {
+        "programName": "Sum of Three Numbers",
+        "program": [
+            "LDA A",
+            "MBA",
+            "LDA B",
+            "ADD",
+            "STA TEMP",
+            "LDA C",
+            "ADD",
+            "STA SUM",
+            "HLT"
+        ],
+        "ramSetup": [
+            {
+                "address": "00",
+                "label": "A",
+                "value": "01"
+            },
+            {
+                "address": "01",
+                "label": "B",
+                "value": "02"
+            },
+            {
+                "address": "02",
+                "label": "C",
+                "value": "03"
+            },
+            {
+                "address": "03",
+                "label": "TEMP",
+                "value": "00"
+            },
+            {
+                "address": "04",
+                "label": "SUM",
+                "value": "00"
+            }
+        ]
+    },
+    {
+        "programName": "Count Down",
+        "program": [
+            "LDA COUNTER",
+            "SUB_ONE:",
+            "MBA",
+            "LDA ONE",
+            "SUB",
+            "STA COUNTER",
+            "LDA COUNTER",
+            "JN SUB_ONE",
+            "HLT"
+        ],
+        "ramSetup": [
+            {
+                "address": "00",
+                "label": "COUNTER",
+                "value": "05"
+            },
+            {
+                "address": "01",
+                "label": "ONE",
+                "value": "01"
+            }
+        ]
+    },
+    {
+        "programName": "Compute 2×A",
+        "program": [
+            "LDA A",
+            "MBA",
+            "ADD",
+            "STA RESULT",
+            "HLT"
+        ],
+        "ramSetup": [
+            {
+                "address": "00",
+                "label": "A",
+                "value": "04"
+            },
+            {
+                "address": "01",
+                "label": "RESULT",
+                "value": "00"
+            }
+        ]
+    },
+    {
+        "programName": "Test Negative",
+        "program": [
+            "LDA A",
+            "MBA",
+            "LDA B",
+            "SUB",
+            "JN NEG",
+            "HLT",
+            "NEG:",
+            "LDA FLAG",
+            "STA RESULT",
+            "HLT"
+        ],
+        "ramSetup": [
+            {
+                "address": "00",
+                "label": "A",
+                "value": "03"
+            },
+            {
+                "address": "01",
+                "label": "B",
+                "value": "05"
+            },
+            {
+                "address": "02",
+                "label": "FLAG",
+                "value": "FF"
+            },
+            {
+                "address": "03",
+                "label": "RESULT",
+                "value": "00"
+            }
+        ]
+    },
+    {
+        "programName": "Load and Store",
+        "program": [
+            "LDA X",
+            "STA Y",
+            "HLT"
+        ],
+        "ramSetup": [
+            {
+                "address": "00",
+                "label": "X",
+                "value": "07"
+            },
+            {
+                "address": "01",
+                "label": "Y",
+                "value": "00"
+            }
+        ]
+    },
+    {
+        "programName": "Loop 5 Times",
+        "program": [
+            "LDA COUNTER",
+            "LOOP:",
+            "SUB",
+            "STA COUNTER",
+            "LDA COUNTER",
+            "JN LOOP",
+            "HLT"
+        ],
+        "ramSetup": [
+            {
+                "address": "00",
+                "label": "COUNTER",
+                "value": "05"
+            },
+            {
+                "address": "01",
+                "label": "ONE",
+                "value": "01"
+            }
+        ]
+    },
+    {
+        "programName": "Multiply Two Numbers (Repeated Addition)",
+        "program": [
+            "LDA A",
+            "STA RESULT",
+            "LDA B",
+            "LOOP:",
+            "SUB",
+            "STA B",
+            "LDA RESULT",
+            "ADD",
+            "STA RESULT",
+            "LDA B",
+            "JN LOOP",
+            "HLT"
+        ],
+        "ramSetup": [
+            {
+                "address": "00",
+                "label": "A",
+                "value": "03"
+            },
+            {
+                "address": "01",
+                "label": "B",
+                "value": "02"
+            },
+            {
+                "address": "02",
+                "label": "RESULT",
+                "value": "00"
+            }
+        ]
+    }
+]
