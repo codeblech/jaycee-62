@@ -81,6 +81,7 @@ def ai_assist():
         execution_history = request.json.get("history", [])
 
         prompt = f"""You are an educational assistant helping students understand assembly code execution.
+Please provide your analysis in proper markdown format.
 
 Code submitted:
 {code}
@@ -88,13 +89,39 @@ Code submitted:
 Execution history:
 {execution_history}
 
-Please explain:
-1. What is the purpose of this program?
-2. How does it work step by step?
-3. If there are any errors, what might be causing them?
-4. What are the expected outcomes?
+Please provide a detailed analysis including:
 
-Use the register states shown in the execution history to support your explanation."""
+## Program Overview
+- Purpose and main objectives
+- Input/output expectations
+
+## Code Analysis
+- Breakdown of each instruction
+- Data flow between registers
+- Memory access patterns
+- Control flow explanation
+
+## Execution Trace
+- Step-by-step explanation of the execution history
+- Register state changes and their significance
+- Memory modifications
+
+## Performance Analysis
+- Number of instructions executed
+- Memory access patterns
+- Potential optimizations
+
+## Common Pitfalls
+- Potential errors or issues
+- Edge cases to consider
+- Common misconceptions
+
+## Best Practices
+- Suggestions for code improvement
+- Alternative approaches
+- Assembly programming tips
+
+Please use code blocks, tables, and bullet points where appropriate to make the explanation clear and structured."""
 
         response = model.generate_content(prompt)
         return jsonify({"explanation": response.text})

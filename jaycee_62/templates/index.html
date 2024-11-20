@@ -167,7 +167,10 @@
                 <button id="step" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Step</button>
                 <button id="run" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Run All</button>
                 <button id="reset" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Reset</button>
-                <button id="aiAssist" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">AI Help</button>
+                <button id="aiAssist" class="bg-[#2E2D2A] text-white px-4 py-2 rounded hover:bg-[#3E3D3A] flex items-center justify-center gap-2">
+                    <img src="/static/claude-ai-icon.svg" alt="AI" class="w-6 h-6">
+                    <span>Magic</span>
+                </button>
             </div>
         </div>
     </div>
@@ -185,6 +188,11 @@
             </div>
             <div id="aiExplanation" class="text-white whitespace-pre-line"></div>
         </div>
+    </div>
+
+    <!-- Add this after the AI modal div -->
+    <div id="aiLoading" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
+        <div class="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
     </div>
 
     <script>
@@ -399,6 +407,7 @@
             document.getElementById('reset').addEventListener('click', reset);
             document.getElementById('aiAssist').addEventListener('click', async function() {
                 const code = document.getElementById('codeEditor').value;
+                document.getElementById('aiLoading').classList.remove('hidden');
 
                 try {
                     const response = await fetch('/api/ai-assist', {
@@ -420,6 +429,8 @@
 
                 } catch (error) {
                     alert('Error getting AI assistance: ' + error.message);
+                } finally {
+                    document.getElementById('aiLoading').classList.add('hidden');
                 }
             });
 
