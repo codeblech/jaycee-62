@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JC-62 Processor Simulator</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         .register {
             background-color: #374151;
@@ -25,6 +26,53 @@
         }
         .register-glow {
             box-shadow: 0 0 10px rgba(59, 130, 246, 0.7);
+        }
+        /* Markdown styles */
+        #aiExplanation h2 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        #aiExplanation h3 {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-top: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        #aiExplanation ul, #aiExplanation ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        #aiExplanation li {
+            margin-bottom: 0.5rem;
+        }
+
+        #aiExplanation p {
+            margin-bottom: 1rem;
+        }
+
+        #aiExplanation code {
+            background-color: #1f2937;
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            font-family: monospace;
+        }
+
+        #aiExplanation pre {
+            background-color: #1f2937;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        #aiExplanation pre code {
+            background-color: transparent;
+            padding: 0;
         }
     </style>
 </head>
@@ -424,7 +472,8 @@
                     const data = await response.json();
                     if (!response.ok) throw new Error(data.error);
 
-                    document.getElementById('aiExplanation').textContent = data.explanation;
+                    // Render markdown to HTML
+                    document.getElementById('aiExplanation').innerHTML = marked.parse(data.explanation);
                     document.getElementById('aiModal').classList.remove('hidden');
 
                 } catch (error) {
