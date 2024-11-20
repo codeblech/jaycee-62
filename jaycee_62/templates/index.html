@@ -15,6 +15,13 @@
         .register-large {
             min-height: 8rem;
         }
+        .hide-scrollbar {
+            scrollbar-width: none;  /* Firefox */
+            -ms-overflow-style: none;  /* IE and Edge */
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;  /* Chrome, Safari and Opera */
+        }
     </style>
 </head>
 
@@ -30,7 +37,7 @@
         <!-- RAM Section -->
         <div class="col-span-1 lg:col-span-3 bg-gray-800 p-4 rounded-lg">
             <h2 class="text-white text-xl mb-4">RAM</h2>
-            <div class="bg-gray-700 p-2 rounded h-64 md:h-96 overflow-y-auto">
+            <div class="bg-gray-700 p-2 rounded h-64 md:h-96 overflow-y-auto hide-scrollbar">
                 <table id="ramTable" class="w-full text-white">
                     <thead>
                         <tr>
