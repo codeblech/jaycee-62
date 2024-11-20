@@ -29,12 +29,12 @@
     <div class="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4">
         <!-- Code Editor Section -->
         <div class="col-span-1 lg:col-span-4 bg-gray-800 p-4 rounded-lg">
+            <h2 class="text-white text-xl mb-4">Code Editor</h2>
             <div class="mb-4">
                 <select id="sampleCodeSelect" class="w-full p-2 bg-gray-700 text-white rounded">
                     <option value="">Select a sample program...</option>
                 </select>
             </div>
-            <h2 class="text-white text-xl mb-4">Code Editor</h2>
             <textarea id="codeEditor" class="w-full h-64 md:h-96 p-2 font-mono text-lg bg-gray-700 text-white rounded"></textarea>
             <button id="submitCode" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full lg:w-auto">Submit Code</button>
         </div>
@@ -130,26 +130,47 @@
                         // Set code in editor
                         document.getElementById('codeEditor').value = sample.program.join('\n');
 
-                        // Reset RAM first
-                        await fetch('/api/reset', { method: 'POST' });
+                        try {
+                            // Reset RAM first
+                            await fetch('/api/reset', { method: 'POST' });
 
-                        // Set up RAM
-                        for (const ramSetup of sample.ramSetup) {
-                            await fetch('/api/set-ram', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({
-                                    address: ramSetup.address,
-                                    label: ramSetup.label,
-                                    value: ramSetup.value
-                                })
-                            });
+                            // Set up RAM
+                            for (const ramSetup of sample.ramSetup) {
+                                const response = await fetch('/api/set-ram', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({
+                                        address: ramSetup.address,
+                                        label: ramSetup.label || '',
+                                        value: ramSetup.value || ''
+                                    })
+                                });
+
+                                if (!response.ok) {
+                                    throw new Error(`Failed to set RAM at address ${ramSetup.address}`);
+                                }
+                            }
+
+                            // Update the RAM table display
+                            const rows = ramTable.getElementsByTagName('tr');
+                            for (const row of rows) {
+                                const addr = row.cells[0].textContent;
+                                const ramSetup = sample.ramSetup.find(setup => setup.address === addr);
+                                if (ramSetup) {
+                                    row.cells[1].textContent = ramSetup.label || 'NULL';
+                                    row.cells[2].textContent = ramSetup.value || 'NULL';
+                                } else {
+                                    row.cells[1].textContent = 'NULL';
+                                    row.cells[2].textContent = 'NULL';
+                                }
+                            }
+
+                        } catch (error) {
+                            console.error('Error setting up RAM:', error);
+                            alert('Failed to set up RAM values');
                         }
-
-                        // Update UI
-                        updateUI({});
                     });
                 })
                 .catch(error => console.error('Error loading sample codes:', error));
