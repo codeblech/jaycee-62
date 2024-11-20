@@ -11,6 +11,7 @@
             background-color: #374151;
             color: #ffffff;
             min-height: 5rem;
+            transition: box-shadow 0.3s ease-in-out;
         }
         .register-large {
             min-height: 8rem;
@@ -21,6 +22,9 @@
         }
         .hide-scrollbar::-webkit-scrollbar {
             display: none;  /* Chrome, Safari and Opera */
+        }
+        .register-glow {
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.7);
         }
     </style>
 </head>
@@ -350,17 +354,34 @@
             }
 
             function updateUI(data) {
-                // Update registers
-                document.getElementById('pc').textContent = data.pc || '';
-                document.getElementById('acc').textContent = data.acc || '';
-                document.getElementById('b').textContent = data.b || '';
-                document.getElementById('mar').textContent = data.mar || '';
-                document.getElementById('mdr').textContent = data.mdr || '';
-                document.getElementById('ir').textContent = data.ir || '';
-                document.getElementById('nf').textContent = data.nf || '';
-                document.getElementById('instruction').textContent = data.instruction || '';
-                document.getElementById('comments').textContent = data.comments || '';
+                // Helper function to update register with glow effect
+                const updateRegister = (id, newValue) => {
+                    const element = document.getElementById(id);
+                    const oldValue = element.textContent;
+                    element.textContent = newValue || '';
 
+                    // Add glow effect if value changed
+                    if (oldValue !== newValue && newValue) {
+                        const registerDiv = element.closest('.register');
+                        registerDiv.classList.add('register-glow');
+
+                        // Remove glow effect after animation
+                        setTimeout(() => {
+                            registerDiv.classList.remove('register-glow');
+                        }, 1000);
+                    }
+                };
+
+                // Update registers with glow effect
+                updateRegister('pc', data.pc);
+                updateRegister('acc', data.acc);
+                updateRegister('b', data.b);
+                updateRegister('mar', data.mar);
+                updateRegister('mdr', data.mdr);
+                updateRegister('ir', data.ir);
+                updateRegister('nf', data.nf);
+                updateRegister('instruction', data.instruction);
+                updateRegister('comments', data.comments);
 
                 // Update RAM if provided
                 if (data.ram) {
