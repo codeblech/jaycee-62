@@ -19,17 +19,18 @@
 </head>
 
 <body class="bg-gray-900 p-4">
-    <div class="container mx-auto grid grid-cols-12 gap-4">
+    <div class="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4">
         <!-- Code Editor Section -->
-        <div class="col-span-4 bg-gray-800 p-4 rounded-lg">
-            <textarea id="codeEditor" class="w-full h-96 p-2 font-mono text-lg bg-gray-700 text-white rounded"></textarea>
-            <button id="submitCode" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Submit Code</button>
+        <div class="col-span-1 lg:col-span-4 bg-gray-800 p-4 rounded-lg">
+            <h2 class="text-white text-xl mb-4">Code Editor</h2>
+            <textarea id="codeEditor" class="w-full h-64 md:h-96 p-2 font-mono text-lg bg-gray-700 text-white rounded"></textarea>
+            <button id="submitCode" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full lg:w-auto">Submit Code</button>
         </div>
 
         <!-- RAM Section -->
-        <div class="col-span-3 bg-gray-800 p-4 rounded-lg">
+        <div class="col-span-1 lg:col-span-3 bg-gray-800 p-4 rounded-lg">
             <h2 class="text-white text-xl mb-4">RAM</h2>
-            <div class="bg-gray-700 p-2 rounded h-96 overflow-y-auto">
+            <div class="bg-gray-700 p-2 rounded h-64 md:h-96 overflow-y-auto">
                 <table id="ramTable" class="w-full text-white">
                     <thead>
                         <tr>
@@ -41,7 +42,7 @@
                     <tbody></tbody>
                 </table>
             </div>
-            <div class="mt-4 grid grid-cols-3 gap-2">
+            <div class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-2">
                 <input type="text" id="ramAddress" placeholder="Address" class="p-1 bg-gray-700 text-white rounded">
                 <input type="text" id="ramLabel" placeholder="Label" class="p-1 bg-gray-700 text-white rounded">
                 <input type="text" id="ramValue" placeholder="Value" class="p-1 bg-gray-700 text-white rounded">
@@ -50,9 +51,9 @@
         </div>
 
         <!-- Registers Section -->
-        <div class="col-span-5 bg-gray-800 p-4 rounded-lg">
+        <div class="col-span-1 lg:col-span-5 bg-gray-800 p-4 rounded-lg">
             <h2 class="text-white text-xl mb-4">Registers</h2>
-            <div class="grid grid-cols-3 gap-4">
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 <div class="register p-2 rounded">
                     <h3>PC</h3>
                     <div id="pc" class="text-xl"></div>
@@ -92,7 +93,7 @@
                     <div id="comments" class="whitespace-pre-line"></div>
                 </div>
             </div>
-            <div class="mt-4 grid grid-cols-3 gap-4">
+            <div class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <button id="step" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Step</button>
                 <button id="run" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Run All</button>
                 <button id="reset" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Reset</button>
