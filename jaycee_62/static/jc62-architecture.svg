@@ -1,33 +1,33 @@
 <svg width="302" height="268" viewBox="0 0 302 268" fill="none" xmlns="http://www.w3.org/2000/svg">
 <rect width="302" height="268" fill="#1F2937"/>
-<rect x="122" y="51" width="42" height="10" fill="#D9D9D9"/> <!--mar to main-->
-<rect x="164" y="1" width="10" height="174" fill="#D9D9D9"/> <!--main central bus-->
-<rect x="51" y="130" width="43" height="10" fill="#D9D9D9"/> <!--ram to mdr horizontal-->
-<rect x="121" y="155" width="43" height="10" fill="#D9D9D9"/> <!--mdr to main-->
-<rect x="174" y="93" width="42" height="10" fill="#D9D9D9"/> <!--b to main-->
-<rect x="174" y="141" width="42" height="10" fill="#D9D9D9"/> <!--ir to main-->
-<rect x="235" y="161" width="6" height="33" fill="#D9D9D9"/> <!--ir to control-->
-<rect x="174" y="9" width="42" height="10" fill="#D9D9D9"/> <!--acc to main-->
-<rect x="122" y="11" width="42" height="8" fill="#D9D9D9"/> <!--pc to main-->
-<rect x="39" y="84" width="8" height="10" fill="#D9D9D9"/> <!--ram to mar vertical down-->
-<rect x="96" y="71" width="8" height="13" fill="#D9D9D9"/> <!--ram to mar vertical up-->
-<rect x="39" y="123" width="12" height="17" fill="#D9D9D9"/> <!--ram to mdr vertical up-->
-<rect x="231" y="29" width="12" height="13" fill="#D9D9D9"/> <!--acc to alu-->
-<rect x="231" y="71" width="12" height="13" fill="#D9D9D9"/> <!--alu to b-->
-<rect x="94" y="130" width="12" height="16" fill="#D9D9D9"/> <!--ram to mdr vertical down-->
-<rect x="39" y="76" width="57" height="8" fill="#D9D9D9"/> <!--ram to mar horizontal-->
-<rect x="174" y="51" width="42" height="10" fill="#D9D9D9"/> <!--alu to main-->
-<rect x="229" y="234" width="17" height="22" fill="#D9D9D9"/> <!--control arrow rect-->
-<path d="M237.5 268L222.345 255.25H252.655L237.5 268Z" fill="#D9D9D9"/> <!--control arrow triangle-->
-<rect x="79" width="43" height="29" fill="#4A1E3F"/> <!--pc-->
-<rect x="190" y="194" width="97" height="40" fill="#4A1E3F"/> <!--control-->
-<rect x="216" y="132" width="43" height="29" fill="#4A1E3F"/> <!--ir-->
-<rect x="216" y="84" width="43" height="29" fill="#4A1E3F"/> <!--b-->
-<rect x="216" y="42" width="43" height="29" fill="#4A1E3F"/> <!--alu-->
-<rect x="216" width="43" height="29" fill="#4A1E3F"/> <!--acc-->
-<rect x="79" y="146" width="43" height="29" fill="#4A1E3F"/> <!--mdr-->
-<rect x="24" y="94" width="43" height="29" fill="#4A1E3F"/> <!--ram-->
-<rect x="79" y="42" width="43" height="29" fill="#4A1E3F"/> <!--mar-->
+<rect id="mar-to-main" x="122" y="51" width="42" height="10" fill="#D9D9D9"/>
+<rect id="main-central-bus" x="164" y="1" width="10" height="174" fill="#D9D9D9"/>
+<rect id="ram-to-mdr-horizontal" x="51" y="130" width="43" height="10" fill="#D9D9D9"/>
+<rect id="mdr-to-main" x="121" y="155" width="43" height="10" fill="#D9D9D9"/>
+<rect id="b-to-main" x="174" y="93" width="42" height="10" fill="#D9D9D9"/>
+<rect id="ir-to-main" x="174" y="141" width="42" height="10" fill="#D9D9D9"/>
+<rect id="ir-to-control" x="235" y="161" width="6" height="33" fill="#D9D9D9"/>
+<rect id="acc-to-main" x="174" y="9" width="42" height="10" fill="#D9D9D9"/>
+<rect id="pc-to-main" x="122" y="11" width="42" height="8" fill="#D9D9D9"/>
+<rect id="ram-to-mar-vertical-down" x="39" y="84" width="8" height="10" fill="#D9D9D9"/>
+<rect id="ram-to-mar-vertical-up" x="96" y="71" width="8" height="13" fill="#D9D9D9"/>
+<rect id="ram-to-mdr-vertical-up" x="39" y="123" width="12" height="17" fill="#D9D9D9"/>
+<rect id="acc-to-alu" x="231" y="29" width="12" height="13" fill="#D9D9D9"/>
+<rect id="alu-to-b" x="231" y="71" width="12" height="13" fill="#D9D9D9"/>
+<rect id="ram-to-mdr-vertical-down" x="94" y="130" width="12" height="16" fill="#D9D9D9"/>
+<rect id="ram-to-mar-horizontal" x="39" y="76" width="57" height="8" fill="#D9D9D9"/>
+<rect id="alu-to-main" x="174" y="51" width="42" height="10" fill="#D9D9D9"/>
+<rect id="control-arrow-rect" x="229" y="234" width="17" height="22" fill="#D9D9D9"/>
+<path id="control-arrow-triangle" d="M237.5 268L222.345 255.25H252.655L237.5 268Z" fill="#D9D9D9"/>
+<rect id="pc" x="79" width="43" height="29" fill="#4A1E3F"/>
+<rect id="control" x="190" y="194" width="97" height="40" fill="#4A1E3F"/>
+<rect id="ir" x="216" y="132" width="43" height="29" fill="#4A1E3F"/>
+<rect id="b" x="216" y="84" width="43" height="29" fill="#4A1E3F"/>
+<rect id="alu" x="216" y="42" width="43" height="29" fill="#4A1E3F"/>
+<rect id="acc" x="216" width="43" height="29" fill="#4A1E3F"/>
+<rect id="mdr" x="79" y="146" width="43" height="29" fill="#4A1E3F"/>
+<rect id="ram" x="24" y="94" width="43" height="29" fill="#4A1E3F"/>
+<rect id="mar" x="79" y="42" width="43" height="29" fill="#4A1E3F"/>
 <path d="M64 7H77L74.2143 10" stroke="#B4F99D"/>
 <path d="M64 6H77L74.2143 3" stroke="#B4F99D"/>
 <path d="M274 5H261L263.786 8" stroke="#B4F99D"/>
