@@ -14,19 +14,27 @@
             min-height: 5rem;
             transition: box-shadow 0.3s ease-in-out;
         }
+
         .register-large {
             min-height: 8rem;
         }
+
         .hide-scrollbar {
-            scrollbar-width: none;  /* Firefox */
-            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;
+            /* Firefox */
+            -ms-overflow-style: none;
+            /* IE and Edge */
         }
+
         .hide-scrollbar::-webkit-scrollbar {
-            display: none;  /* Chrome, Safari and Opera */
+            display: none;
+            /* Chrome, Safari and Opera */
         }
+
         .register-glow {
             box-shadow: 0 0 10px rgba(59, 130, 246, 0.7);
         }
+
         /* Markdown styles */
         #aiExplanation h2 {
             font-size: 1.5rem;
@@ -42,7 +50,8 @@
             margin-bottom: 0.75rem;
         }
 
-        #aiExplanation ul, #aiExplanation ol {
+        #aiExplanation ul,
+        #aiExplanation ol {
             margin-left: 1.5rem;
             margin-bottom: 1rem;
         }
@@ -80,7 +89,8 @@
 <body class="bg-gray-900 p-4">
     <button id="helpButton" class="fixed top-4 right-4 bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
     </button>
 
@@ -89,8 +99,10 @@
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-white text-2xl font-bold">JC-62 Processor Simulator Help</h2>
                 <button id="closeHelp" class="text-gray-400 hover:text-white">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
             </div>
@@ -98,13 +110,17 @@
                 <section>
                     <h3 class="text-xl font-semibold mb-2">Registers</h3>
                     <ul class="list-disc pl-6 space-y-2">
-                        <li><strong>PC (Program Counter):</strong> Contains the address of the next instruction to be executed</li>
+                        <li><strong>PC (Program Counter):</strong> Contains the address of the next instruction to be
+                            executed</li>
                         <li><strong>ACC (Accumulator):</strong> Main register for arithmetic and logical operations</li>
                         <li><strong>B Register:</strong> Secondary register used in arithmetic operations</li>
                         <li><strong>MAR (Memory Address Register):</strong> Holds the address for memory operations</li>
-                        <li><strong>MDR (Memory Data Register):</strong> Holds data being read from or written to memory</li>
-                        <li><strong>IR (Instruction Register):</strong> Holds the current instruction being executed</li>
-                        <li><strong>NF (Negative Flag):</strong> Set to 1 if the last operation resulted in a negative value</li>
+                        <li><strong>MDR (Memory Data Register):</strong> Holds data being read from or written to memory
+                        </li>
+                        <li><strong>IR (Instruction Register):</strong> Holds the current instruction being executed
+                        </li>
+                        <li><strong>NF (Negative Flag):</strong> Set to 1 if the last operation resulted in a negative
+                            value</li>
                     </ul>
                 </section>
                 <section>
@@ -141,14 +157,18 @@
     <div class="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4">
         <!-- Code Editor Section -->
         <div class="col-span-1 lg:col-span-4 bg-gray-800 p-4 rounded-lg">
-            <h2 class="text-white text-xl mb-4">Code Editor <span id="unsavedIndicator" class="text-yellow-400 text-sm hidden">*unsaved changes</span></h2>
+            <h2 class="text-white text-xl mb-4">Code Editor <span id="unsavedIndicator"
+                    class="text-yellow-400 text-sm hidden">*unsaved changes</span></h2>
             <div class="mb-4">
                 <select id="sampleCodeSelect" class="w-full p-2 bg-gray-700 text-white rounded">
                     <option value="">Select a sample program...</option>
                 </select>
             </div>
-            <textarea id="codeEditor" class="w-full h-64 md:h-96 p-2 font-mono text-lg bg-gray-700 text-white rounded"></textarea>
-            <button id="submitCode" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full lg:w-auto">Submit Code</button>
+            <textarea id="codeEditor"
+                class="w-full h-64 md:h-96 p-2 font-mono text-lg bg-gray-700 text-white rounded"></textarea>
+            <button id="submitCode"
+                class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full lg:w-auto">Submit
+                Code</button>
         </div>
 
         <!-- RAM Section -->
@@ -215,9 +235,13 @@
                 <button id="step" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Step</button>
                 <button id="run" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Run All</button>
                 <button id="reset" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Reset</button>
-                <button id="aiAssist" class="bg-[#2E2D2A] text-white px-4 py-2 rounded hover:bg-[#3E3D3A] flex items-center justify-center gap-2">
+                <button id="aiAssist"
+                    class="bg-[#2E2D2A] text-white px-4 py-2 rounded hover:bg-[#3E3D3A] flex items-center justify-center gap-2">
                     <img src="/static/claude-ai-icon.svg" alt="AI" class="w-6 h-6">
                     <span>Magic</span>
+                </button>
+                <button id="visualizeBtn" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">
+                    Visualize
                 </button>
             </div>
         </div>
@@ -229,8 +253,10 @@
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-white text-2xl font-bold">AI Analysis</h2>
                 <button id="closeAi" class="text-gray-400 hover:text-white">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
             </div>
@@ -243,6 +269,37 @@
         <div class="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
     </div>
 
+    <!-- Replace the existing visualizeModal div -->
+    <div id="visualizeModal"
+        class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm hidden flex items-center justify-center z-50">
+        <div class="bg-gray-800 p-4 rounded-lg w-[95vw] h-[90vh] relative">
+            <button id="closeVisualize" class="absolute top-2 right-2 text-gray-400 hover:text-white z-10">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            <div class="w-full h-full flex gap-6">
+                <!-- SVG Container (Left Side) -->
+                <div class="w-2/3 h-full flex items-center justify-center">
+                    <img src="/static/jc62-architecture.svg" alt="JC-62 Architecture" class="w-full h-full p-4"
+                        style="object-fit: contain;">
+                </div>
+
+                <!-- Instructions List (Right Side) -->
+                <div class="w-1/3 h-full bg-gray-700 rounded-lg p-4 overflow-hidden flex flex-col">
+                    <h3 class="text-white text-xl font-semibold mb-4">Program Instructions</h3>
+                    <div id="programInstructions" class="overflow-y-auto hide-scrollbar flex-1">
+                        <!-- Instructions will be populated dynamically -->
+                        <div class="text-gray-400 text-center pt-4">
+                            Submit a program to see its instructions here
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             // Add this near the top of the DOMContentLoaded handler
@@ -251,7 +308,7 @@
             const unsavedIndicator = document.getElementById('unsavedIndicator');
             const executionHistory = [];
 
-            codeEditor.addEventListener('input', function() {
+            codeEditor.addEventListener('input', function () {
                 if (this.value !== lastSavedCode) {
                     unsavedIndicator.classList.remove('hidden');
                 } else {
@@ -272,7 +329,7 @@
                     });
 
                     // Add change event listener
-                    select.addEventListener('change', async function() {
+                    select.addEventListener('change', async function () {
                         if (this.value === '') return;
 
                         const sample = sampleCodes[this.value];
@@ -359,11 +416,11 @@
                 // Add event listeners for both cells
                 [labelCell, valueCell].forEach(cell => {
                     // Store original value when starting to edit
-                    cell.addEventListener('focus', function() {
+                    cell.addEventListener('focus', function () {
                         this.dataset.originalValue = this.textContent;
                     });
 
-                    cell.addEventListener('blur', async function() {
+                    cell.addEventListener('blur', async function () {
                         let newValue = this.textContent.trim();
                         if (newValue === '') {
                             this.textContent = 'NULL';
@@ -436,7 +493,7 @@
                     });
 
                     // Handle keyboard events
-                    cell.addEventListener('keydown', function(e) {
+                    cell.addEventListener('keydown', function (e) {
                         if (e.key === 'Escape') {
                             this.textContent = this.dataset.originalValue;
                             this.blur();
@@ -453,7 +510,7 @@
             document.getElementById('step').addEventListener('click', step);
             document.getElementById('run').addEventListener('click', runAll);
             document.getElementById('reset').addEventListener('click', reset);
-            document.getElementById('aiAssist').addEventListener('click', async function() {
+            document.getElementById('aiAssist').addEventListener('click', async function () {
                 const code = document.getElementById('codeEditor').value;
                 document.getElementById('aiLoading').classList.remove('hidden');
 
@@ -497,6 +554,121 @@
                 lastSavedCode = code; // Update saved code
                 unsavedIndicator.classList.add('hidden'); // Hide indicator
                 updateUI({});
+
+                // Update program instructions in visualization modal
+                updateProgramInstructions(code);
+            }
+
+            function updateProgramInstructions(code) {
+                const programInstructions = document.getElementById('programInstructions');
+                programInstructions.innerHTML = ''; // Clear existing content
+
+                if (!code.trim()) {
+                    programInstructions.innerHTML = `
+                        <div class="text-gray-400 text-center pt-4">
+                            Submit a program to see its instructions here
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Parse the code and create instruction elements
+                const lines = code.split('\n');
+                let currentAddress = 0;
+
+                lines.forEach(line => {
+                    line = line.trim();
+                    if (!line || line.startsWith(';')) return; // Skip empty lines and comments
+
+                    // Split the line into parts (label, instruction, operand)
+                    const parts = line.split(/\s+/);
+                    let instruction, operand;
+
+                    if (parts[0].endsWith(':')) {
+                        // Line has a label
+                        instruction = parts[1];
+                        operand = parts[2];
+                    } else {
+                        instruction = parts[0];
+                        operand = parts[1];
+                    }
+
+                    if (!instruction) return;
+
+                    // Create instruction element
+                    const instructionDiv = document.createElement('div');
+                    instructionDiv.className = 'mb-6';
+
+                    // Add instruction header
+                    const header = document.createElement('h4');
+                    header.className = 'text-white text-lg font-medium mb-2';
+                    header.textContent = `${instruction.toUpperCase()} ${operand || ''}`;
+                    instructionDiv.appendChild(header);
+
+                    // Add instruction steps
+                    const steps = document.createElement('ol');
+                    steps.className = 'list-decimal list-inside text-gray-300 space-y-1 ml-2';
+
+                    // Add common fetch cycle steps
+                    steps.innerHTML = `
+                        <li>PC → MAR</li>
+                        <li>Memory[MAR] → MDR, PC + 1 → PC</li>
+                        <li>MDR → IR</li>
+                    `;
+
+                    // Add instruction-specific steps
+                    switch (instruction.toUpperCase()) {
+                        case 'LDA':
+                            steps.innerHTML += `
+                                <li>IR(address) → MAR</li>
+                                <li>Memory[MAR] → MDR</li>
+                                <li>MDR → ACC</li>
+                            `;
+                            break;
+                        case 'ADD':
+                            steps.innerHTML += `
+                                <li>IR(address) → MAR</li>
+                                <li>Memory[MAR] → MDR</li>
+                                <li>ACC → B</li>
+                                <li>MDR + B → ACC</li>
+                            `;
+                            break;
+                        case 'SUB':
+                            steps.innerHTML += `
+                                <li>IR(address) → MAR</li>
+                                <li>Memory[MAR] → MDR</li>
+                                <li>ACC → B</li>
+                                <li>B - MDR → ACC</li>
+                            `;
+                            break;
+                        case 'STA':
+                            steps.innerHTML += `
+                                <li>IR(address) → MAR</li>
+                                <li>ACC → MDR</li>
+                                <li>MDR → Memory[MAR]</li>
+                            `;
+                            break;
+                        case 'BRZ':
+                            steps.innerHTML += `
+                                <li>If ACC = 0: IR(address) → PC</li>
+                            `;
+                            break;
+                        case 'BRP':
+                            steps.innerHTML += `
+                                <li>If NF = 0: IR(address) → PC</li>
+                            `;
+                            break;
+                        case 'HLT':
+                            steps.innerHTML += `
+                                <li>Stop execution</li>
+                            `;
+                            break;
+                    }
+
+                    instructionDiv.appendChild(steps);
+                    programInstructions.appendChild(instructionDiv);
+                    currentAddress++;
+                });
             }
 
             async function step() {
@@ -635,6 +807,32 @@
             document.getElementById('aiModal').addEventListener('click', (e) => {
                 if (e.target === document.getElementById('aiModal')) {
                     document.getElementById('aiModal').classList.add('hidden');
+                }
+            });
+
+            // Visualization modal functionality
+            const visualizeBtn = document.getElementById('visualizeBtn');
+            const visualizeModal = document.getElementById('visualizeModal');
+            const closeVisualize = document.getElementById('closeVisualize');
+
+            visualizeBtn.addEventListener('click', () => {
+                visualizeModal.classList.remove('hidden');
+            });
+
+            closeVisualize.addEventListener('click', () => {
+                visualizeModal.classList.add('hidden');
+            });
+
+            visualizeModal.addEventListener('click', (e) => {
+                if (e.target === visualizeModal) {
+                    visualizeModal.classList.add('hidden');
+                }
+            });
+
+            // Add Escape key handler for visualize modal
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && !visualizeModal.classList.contains('hidden')) {
+                    visualizeModal.classList.add('hidden');
                 }
             });
         });

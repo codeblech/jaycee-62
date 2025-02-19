@@ -1,0 +1,3 @@
+- the svg has comments corresponding to each component (pc, mar, mdr, etc) and sections of the bus (mar to main, ram to mdr, etc).
+- for each step corresponding to each instruction, to show the flow of data visually, i want to change the color of the component and the section of the bus used,
+- 
