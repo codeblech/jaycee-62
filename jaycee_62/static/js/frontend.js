@@ -441,6 +441,7 @@ document.addEventListener("DOMContentLoaded", function () {
       "ir-to-main",
       "acc-to-main",
       "b-to-main",
+      "pc-to-main",
     ];
 
     // Reset colors
@@ -679,6 +680,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (transfer.includes("RAM(MAR)")) {
       return ["ram-to-mdr-horizontal", "ram-to-mdr-vertical-up", "ram-to-mdr-vertical-down"];
+    }
+
+    // Handle MAR ← PC transfer
+    if (parts[0] === "MAR" && parts[1] === "PC") {
+      return ["pc-to-main", "mar-to-main"];
+    }
+
+    // Handle IR ← MDR transfer
+    if (parts[0] === "IR" && parts[1] === "MDR") {
+      return ["mdr-to-main", "ir-to-main"];
     }
 
     return ["mar-to-main"]; // Default bus line
