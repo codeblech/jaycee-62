@@ -316,38 +316,52 @@ document.addEventListener("DOMContentLoaded", function () {
       // Add table body
       const tbody = document.createElement("tbody");
 
-      // Add fetch cycle steps
+      // Add fetch cycle steps and instruction-specific steps
       const fetchSteps = [
         { transfer: "MAR ← PC", description: "Get next instruction address" },
         { transfer: "MDR ← RAM(MAR)", description: "Read instruction from memory" },
         { transfer: "IR ← MDR", description: "Load instruction into IR" },
       ];
 
-      fetchSteps.forEach((step, index) => {
-        const tr = document.createElement("tr");
-        tr.className = "cursor-pointer hover:bg-gray-700";
-        tr.innerHTML = `
-          <td class="py-1">${index}</td>
-          <td class="py-1 font-mono">${step.transfer}</td>
-          <td class="py-1">${step.description}</td>
-        `;
-        tr.onclick = () =>
-          highlightComponents(getComponentsForTransfer(step.transfer), getBusForTransfer(step.transfer));
-        tbody.appendChild(tr);
-      });
-
-      // Add instruction-specific steps
+      // Create combined steps array with exactly 6 steps
+      const allSteps = [...fetchSteps];
       const instructionSteps = getInstructionSteps(instruction.toUpperCase());
-      instructionSteps.forEach((step, index) => {
-        const [transfer, description] = step.text.split(" | ");
+      allSteps.push(...instructionSteps);
+
+      // Fill remaining steps with dashes if needed (except for HLT)
+      if (instruction.toUpperCase() !== "HLT" && allSteps.length < 6) {
+        const remainingSteps = 6 - allSteps.length;
+        for (let i = 0; i < remainingSteps; i++) {
+          allSteps.push({ transfer: "-", description: "-" });
+        }
+      }
+
+      // Add all steps to the table
+      allSteps.forEach((step, index) => {
         const tr = document.createElement("tr");
         tr.className = "cursor-pointer hover:bg-gray-700";
-        tr.innerHTML = `
-          <td class="py-1">${index + 3}</td>
-          <td class="py-1 font-mono">${transfer}</td>
-          <td class="py-1">${description}</td>
-        `;
-        tr.onclick = () => highlightComponents(step.components, step.bus);
+
+        if ("text" in step) {
+          // Handle instruction-specific steps
+          const [transfer, description] = step.text.split(" | ");
+          tr.innerHTML = `
+            <td class="py-1">${index}</td>
+            <td class="py-1 font-mono">${transfer}</td>
+            <td class="py-1">${description}</td>
+          `;
+          tr.onclick = () => highlightComponents(step.components, step.bus);
+        } else {
+          // Handle fetch steps or dash steps
+          tr.innerHTML = `
+            <td class="py-1">${index}</td>
+            <td class="py-1 font-mono">${step.transfer}</td>
+            <td class="py-1">${step.description}</td>
+          `;
+          if (step.transfer !== "-") {
+            tr.onclick = () =>
+              highlightComponents(getComponentsForTransfer(step.transfer), getBusForTransfer(step.transfer));
+          }
+        }
         tbody.appendChild(tr);
       });
 
@@ -384,19 +398,31 @@ document.addEventListener("DOMContentLoaded", function () {
       ADD: [
         { text: "ALU ← ACC + B | Add B to ACC", components: ["acc", "b"], bus: ["acc-to-main", "b-to-main"] },
         { text: "ACC ← ALU | Store result in ACC", components: ["acc"], bus: ["acc-to-main"] },
+        { text: "- | -", components: [], bus: [] },
       ],
       SUB: [
         { text: "ALU ← ACC - B | Subtract B from ACC", components: ["acc", "b"], bus: ["acc-to-main", "b-to-main"] },
         { text: "ACC ← ALU | Store result in ACC", components: ["acc"], bus: ["acc-to-main"] },
+        { text: "- | -", components: [], bus: [] },
       ],
-      MBA: [{ text: "B ← ACC | Copy ACC to B register", components: ["acc", "b"], bus: ["acc-to-main", "b-to-main"] }],
-      JMP: [{ text: "PC ← IR | Jump to address in IR", components: ["ir", "pc"], bus: ["ir-to-main", "mar-to-main"] }],
+      MBA: [
+        { text: "B ← ACC | Copy ACC to B register", components: ["acc", "b"], bus: ["acc-to-main", "b-to-main"] },
+        { text: "- | -", components: [], bus: [] },
+        { text: "- | -", components: [], bus: [] },
+      ],
+      JMP: [
+        { text: "PC ← IR | Jump to address in IR", components: ["ir", "pc"], bus: ["ir-to-main", "mar-to-main"] },
+        { text: "- | -", components: [], bus: [] },
+        { text: "- | -", components: [], bus: [] },
+      ],
       JN: [
         {
           text: "PC ← IR if NF set | Jump if negative flag is set",
           components: ["nf", "ir", "pc"],
           bus: ["ir-to-main", "mar-to-main"],
         },
+        { text: "- | -", components: [], bus: [] },
+        { text: "- | -", components: [], bus: [] },
       ],
       HLT: [{ text: "Stop clock | Halt execution", components: ["ir"], bus: [] }],
     };
