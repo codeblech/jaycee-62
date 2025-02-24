@@ -298,40 +298,61 @@ document.addEventListener("DOMContentLoaded", function () {
       header.textContent = `${instruction.toUpperCase()} ${operand || ""}`;
       instructionDiv.appendChild(header);
 
-      // Add instruction steps
-      const steps = document.createElement("ol");
-      steps.className = "list-decimal list-inside text-gray-300 space-y-1 ml-2";
+      // Create table for steps
+      const table = document.createElement("table");
+      table.className = "w-full text-gray-300 border-collapse";
 
-      // Add common fetch cycle steps with click handlers
+      // Add table header
+      const thead = document.createElement("thead");
+      thead.innerHTML = `
+        <tr class="text-left border-b border-gray-600">
+          <th class="py-2 w-16">Ring Pulse</th>
+          <th class="py-2">Register Transfer</th>
+          <th class="py-2">Description</th>
+        </tr>
+      `;
+      table.appendChild(thead);
+
+      // Add table body
+      const tbody = document.createElement("tbody");
+
+      // Add fetch cycle steps
       const fetchSteps = [
-        { text: "PC → MAR", components: ["pc", "mar"], bus: ["mar-to-main"] },
-        {
-          text: "Memory[MAR] → MDR, PC + 1 → PC",
-          components: ["mar", "mdr", "pc"],
-          bus: ["ram-to-mdr-horizontal", "ram-to-mdr-vertical-up", "ram-to-mdr-vertical-down"],
-        },
-        { text: "MDR → IR", components: ["mdr", "ir"], bus: ["mdr-to-main", "ir-to-main"] },
+        { transfer: "MAR ← PC", description: "Get next instruction address" },
+        { transfer: "MDR ← RAM(MAR)", description: "Read instruction from memory" },
+        { transfer: "IR ← MDR", description: "Load instruction into IR" },
       ];
 
-      fetchSteps.forEach((step) => {
-        const li = document.createElement("li");
-        li.className = "cursor-pointer hover:text-white transition-colors";
-        li.textContent = step.text;
-        li.onclick = () => highlightComponents(step.components, step.bus);
-        steps.appendChild(li);
+      fetchSteps.forEach((step, index) => {
+        const tr = document.createElement("tr");
+        tr.className = "cursor-pointer hover:bg-gray-700";
+        tr.innerHTML = `
+          <td class="py-1">${index}</td>
+          <td class="py-1 font-mono">${step.transfer}</td>
+          <td class="py-1">${step.description}</td>
+        `;
+        tr.onclick = () =>
+          highlightComponents(getComponentsForTransfer(step.transfer), getBusForTransfer(step.transfer));
+        tbody.appendChild(tr);
       });
 
       // Add instruction-specific steps
       const instructionSteps = getInstructionSteps(instruction.toUpperCase());
-      instructionSteps.forEach((step) => {
-        const li = document.createElement("li");
-        li.className = "cursor-pointer hover:text-white transition-colors";
-        li.textContent = step.text;
-        li.onclick = () => highlightComponents(step.components, step.bus);
-        steps.appendChild(li);
+      instructionSteps.forEach((step, index) => {
+        const [transfer, description] = step.text.split(" | ");
+        const tr = document.createElement("tr");
+        tr.className = "cursor-pointer hover:bg-gray-700";
+        tr.innerHTML = `
+          <td class="py-1">${index + 3}</td>
+          <td class="py-1 font-mono">${transfer}</td>
+          <td class="py-1">${description}</td>
+        `;
+        tr.onclick = () => highlightComponents(step.components, step.bus);
+        tbody.appendChild(tr);
       });
 
-      instructionDiv.appendChild(steps);
+      table.appendChild(tbody);
+      instructionDiv.appendChild(table);
       programInstructions.appendChild(instructionDiv);
     });
   }
@@ -339,54 +360,45 @@ document.addEventListener("DOMContentLoaded", function () {
   function getInstructionSteps(instruction) {
     const steps = {
       LDA: [
-        { text: "IR(address) → MAR", components: ["ir", "mar"], bus: ["ir-to-main", "mar-to-main"] },
+        { text: "MAR ← IR | Get operand address", components: ["ir", "mar"], bus: ["ir-to-main", "mar-to-main"] },
         {
-          text: "Memory[MAR] → MDR",
+          text: "MDR ← RAM(MAR) | Read operand from memory",
           components: ["mar", "mdr"],
           bus: ["ram-to-mdr-horizontal", "ram-to-mdr-vertical-up", "ram-to-mdr-vertical-down"],
         },
-        { text: "MDR → ACC", components: ["mdr", "acc"], bus: ["mdr-to-main", "acc-to-main"] },
-      ],
-      ADD: [
-        { text: "IR(address) → MAR", components: ["ir", "mar"], bus: ["ir-to-main", "mar-to-main"] },
-        {
-          text: "Memory[MAR] → MDR",
-          components: ["mar", "mdr"],
-          bus: ["ram-to-mdr-horizontal", "ram-to-mdr-vertical-up", "ram-to-mdr-vertical-down"],
-        },
-        { text: "ACC → B", components: ["acc", "b"], bus: ["acc-to-main", "b-to-main"] },
-        { text: "MDR + B → ACC", components: ["mdr", "b", "acc"], bus: ["mdr-to-main", "b-to-main", "acc-to-main"] },
-      ],
-      SUB: [
-        { text: "IR(address) → MAR", components: ["ir", "mar"], bus: ["ir-to-main", "mar-to-main"] },
-        {
-          text: "Memory[MAR] → MDR",
-          components: ["mar", "mdr"],
-          bus: ["ram-to-mdr-horizontal", "ram-to-mdr-vertical-up", "ram-to-mdr-vertical-down"],
-        },
-        { text: "ACC → B", components: ["acc", "b"], bus: ["acc-to-main", "b-to-main"] },
-        { text: "B - MDR → ACC", components: ["b", "mdr", "acc"], bus: ["b-to-main", "mdr-to-main", "acc-to-main"] },
+        { text: "ACC ← MDR | Load operand into ACC", components: ["mdr", "acc"], bus: ["mdr-to-main", "acc-to-main"] },
       ],
       STA: [
-        { text: "IR(address) → MAR", components: ["ir", "mar"], bus: ["ir-to-main", "mar-to-main"] },
-        { text: "ACC → MDR", components: ["acc", "mdr"], bus: ["acc-to-main", "mdr-to-main"] },
+        { text: "MAR ← IR | Get target address", components: ["ir", "mar"], bus: ["ir-to-main", "mar-to-main"] },
         {
-          text: "MDR → Memory[MAR]",
+          text: "MDR ← ACC | Prepare ACC value for storage",
+          components: ["acc", "mdr"],
+          bus: ["acc-to-main", "mdr-to-main"],
+        },
+        {
+          text: "RAM(MAR) ← MDR | Store ACC value in memory",
           components: ["mdr", "mar"],
           bus: ["ram-to-mdr-horizontal", "ram-to-mdr-vertical-up", "ram-to-mdr-vertical-down"],
         },
       ],
-      BRZ: [
+      ADD: [
+        { text: "ALU ← ACC + B | Add B to ACC", components: ["acc", "b"], bus: ["acc-to-main", "b-to-main"] },
+        { text: "ACC ← ALU | Store result in ACC", components: ["acc"], bus: ["acc-to-main"] },
+      ],
+      SUB: [
+        { text: "ALU ← ACC - B | Subtract B from ACC", components: ["acc", "b"], bus: ["acc-to-main", "b-to-main"] },
+        { text: "ACC ← ALU | Store result in ACC", components: ["acc"], bus: ["acc-to-main"] },
+      ],
+      MBA: [{ text: "B ← ACC | Copy ACC to B register", components: ["acc", "b"], bus: ["acc-to-main", "b-to-main"] }],
+      JMP: [{ text: "PC ← IR | Jump to address in IR", components: ["ir", "pc"], bus: ["ir-to-main", "mar-to-main"] }],
+      JN: [
         {
-          text: "If ACC = 0: IR(address) → PC",
-          components: ["acc", "ir", "pc"],
-          bus: ["acc-to-main", "ir-to-main", "mar-to-main"],
+          text: "PC ← IR if NF set | Jump if negative flag is set",
+          components: ["nf", "ir", "pc"],
+          bus: ["ir-to-main", "mar-to-main"],
         },
       ],
-      BRP: [
-        { text: "If NF = 0: IR(address) → PC", components: ["nf", "ir", "pc"], bus: ["ir-to-main", "mar-to-main"] },
-      ],
-      HLT: [{ text: "Stop execution", components: ["ir"], bus: [] }],
+      HLT: [{ text: "Stop clock | Halt execution", components: ["ir"], bus: [] }],
     };
     return steps[instruction] || [];
   }
@@ -607,4 +619,42 @@ document.addEventListener("DOMContentLoaded", function () {
       visualizeModal.classList.add("hidden");
     }
   });
+
+  // Add this helper function to determine components based on transfer text
+  function getComponentsForTransfer(transfer) {
+    const parts = transfer.split("←").map((p) => p.trim());
+    const components = [];
+
+    // Map text representations to component IDs
+    const componentMap = {
+      PC: "pc",
+      MAR: "mar",
+      MDR: "mdr",
+      IR: "ir",
+      ACC: "acc",
+      B: "b",
+      "RAM(MAR)": "mar",
+    };
+
+    parts.forEach((part) => {
+      Object.entries(componentMap).forEach(([key, value]) => {
+        if (part.includes(key)) {
+          components.push(value);
+        }
+      });
+    });
+
+    return components;
+  }
+
+  // Add this helper function to determine bus lines based on transfer text
+  function getBusForTransfer(transfer) {
+    const parts = transfer.split("←").map((p) => p.trim());
+
+    if (transfer.includes("RAM(MAR)")) {
+      return ["ram-to-mdr-horizontal", "ram-to-mdr-vertical-up", "ram-to-mdr-vertical-down"];
+    }
+
+    return ["mar-to-main"]; // Default bus line
+  }
 });
