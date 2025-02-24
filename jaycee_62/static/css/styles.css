@@ -1,0 +1,75 @@
+.register {
+    background-color: #374151;
+    color: #ffffff;
+    min-height: 5rem;
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.register-large {
+    min-height: 8rem;
+}
+
+.hide-scrollbar {
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE and Edge */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+    /* Chrome, Safari and Opera */
+}
+
+.register-glow {
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.7);
+}
+
+/* Markdown styles */
+#aiExplanation h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+#aiExplanation h3 {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-top: 1.25rem;
+    margin-bottom: 0.75rem;
+}
+
+#aiExplanation ul,
+#aiExplanation ol {
+    margin-left: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+#aiExplanation li {
+    margin-bottom: 0.5rem;
+}
+
+#aiExplanation p {
+    margin-bottom: 1rem;
+}
+
+#aiExplanation code {
+    background-color: #1f2937;
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.25rem;
+    font-family: monospace;
+}
+
+#aiExplanation pre {
+    background-color: #1f2937;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    overflow-x: auto;
+    margin: 1rem 0;
+}
+
+#aiExplanation pre code {
+    background-color: transparent;
+    padding: 0;
+}
