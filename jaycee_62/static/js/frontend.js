@@ -396,13 +396,21 @@ document.addEventListener("DOMContentLoaded", function () {
         },
       ],
       ADD: [
-        { text: "ALU ← ACC + B | Add B to ACC", components: ["acc", "b"], bus: ["acc-to-main", "b-to-main"] },
-        { text: "ACC ← ALU | Store result in ACC", components: ["acc"], bus: ["acc-to-main"] },
+        {
+          text: "ALU ← ACC + B | Add B to ACC",
+          components: ["acc", "b"],
+          bus: ["acc-to-main", "b-to-main", "acc-to-alu"],
+        },
+        { text: "ACC ← ALU | Store result in ACC", components: ["acc"], bus: ["acc-to-alu"] },
         { text: "- | -", components: [], bus: [] },
       ],
       SUB: [
-        { text: "ALU ← ACC - B | Subtract B from ACC", components: ["acc", "b"], bus: ["acc-to-main", "b-to-main"] },
-        { text: "ACC ← ALU | Store result in ACC", components: ["acc"], bus: ["acc-to-main"] },
+        {
+          text: "ALU ← ACC - B | Subtract B from ACC",
+          components: ["acc", "b"],
+          bus: ["acc-to-main", "b-to-main", "acc-to-alu"],
+        },
+        { text: "ACC ← ALU | Store result in ACC", components: ["acc"], bus: ["acc-to-alu"] },
         { text: "- | -", components: [], bus: [] },
       ],
       MBA: [
@@ -442,6 +450,7 @@ document.addEventListener("DOMContentLoaded", function () {
       "acc-to-main",
       "b-to-main",
       "pc-to-main",
+      "acc-to-alu",
     ];
 
     // Reset colors
