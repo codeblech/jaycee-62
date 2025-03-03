@@ -116,50 +116,44 @@
             </div>
         </div>
 
-        <!-- Registers Section -->
-        <div class="col-span-1 lg:col-span-8 bg-gray-800 p-4 rounded-lg">
-            <h2 class="text-white text-xl mb-4">Registers</h2>
-            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                <div class="register p-2 rounded">
-                    <h3>PC</h3>
-                    <div id="pc" class="text-xl"></div>
-                </div>
-                <div class="register p-2 rounded">
-                    <h3>ACC</h3>
-                    <div id="acc" class="text-xl"></div>
-                </div>
-                <div class="register p-2 rounded">
-                    <h3>B</h3>
-                    <div id="b" class="text-xl"></div>
-                </div>
-                <div class="register p-2 rounded">
-                    <h3>MAR</h3>
-                    <div id="mar" class="text-xl"></div>
-                </div>
-                <div class="register p-2 rounded">
-                    <h3>MDR</h3>
-                    <div id="mdr" class="text-xl"></div>
-                </div>
-                <div class="register p-2 rounded">
-                    <h3>IR</h3>
-                    <div id="ir" class="text-xl"></div>
-                </div>
-                <div class="register p-2 rounded">
-                    <h3>NF</h3>
-                    <div id="nf" class="text-xl"></div>
-                </div>
-            </div>
-            <div class="mt-4">
-                <div class="register register-large p-2 rounded mb-2">
-                    <h3>Instruction</h3>
-                    <div id="instruction" class="whitespace-pre-line"></div>
-                </div>
-                <div class="register register-large p-2 rounded">
-                    <h3>Comments</h3>
-                    <div id="comments" class="whitespace-pre-line"></div>
+        <!-- Right Column -->
+        <div class="col-span-1 lg:col-span-8 flex flex-col gap-4">
+            <!-- Registers Row -->
+            <div class="bg-gray-800 p-2 rounded-lg">
+                <div class="flex flex-row gap-2 justify-end">
+                    <div class="register p-1 rounded min-w-[60px] text-center">
+                        <h3 class="text-sm text-gray-400">PC</h3>
+                        <div id="pc" class="text-sm text-white"></div>
+                    </div>
+                    <div class="register p-1 rounded min-w-[60px] text-center">
+                        <h3 class="text-sm text-gray-400">ACC</h3>
+                        <div id="acc" class="text-sm text-white"></div>
+                    </div>
+                    <div class="register p-1 rounded min-w-[60px] text-center">
+                        <h3 class="text-sm text-gray-400">B</h3>
+                        <div id="b" class="text-sm text-white"></div>
+                    </div>
+                    <div class="register p-1 rounded min-w-[60px] text-center">
+                        <h3 class="text-sm text-gray-400">MAR</h3>
+                        <div id="mar" class="text-sm text-white"></div>
+                    </div>
+                    <div class="register p-1 rounded min-w-[60px] text-center">
+                        <h3 class="text-sm text-gray-400">MDR</h3>
+                        <div id="mdr" class="text-sm text-white"></div>
+                    </div>
+                    <div class="register p-1 rounded min-w-[60px] text-center">
+                        <h3 class="text-sm text-gray-400">IR</h3>
+                        <div id="ir" class="text-sm text-white"></div>
+                    </div>
+                    <div class="register p-1 rounded min-w-[60px] text-center">
+                        <h3 class="text-sm text-gray-400">NF</h3>
+                        <div id="nf" class="text-sm text-white"></div>
+                    </div>
                 </div>
             </div>
-            <div class="mt-4 grid grid-cols-1 sm:grid-cols-4 gap-4">
+
+            <!-- Control Buttons -->
+            <div class="flex flex-row gap-2 justify-end">
                 <button id="step" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Step</button>
                 <button id="run" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Run All</button>
                 <button id="reset" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Reset</button>

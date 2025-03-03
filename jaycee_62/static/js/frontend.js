@@ -553,18 +553,21 @@ document.addEventListener("DOMContentLoaded", function () {
     // Helper function to update register with glow effect
     const updateRegister = (id, newValue) => {
       const element = document.getElementById(id);
+      if (!element) return; // Skip if element doesn't exist
       const oldValue = element.textContent;
       element.textContent = newValue || "";
 
       // Add glow effect if value changed
       if (oldValue !== newValue && newValue) {
         const registerDiv = element.closest(".register");
-        registerDiv.classList.add("register-glow");
+        if (registerDiv) {
+          registerDiv.classList.add("register-glow");
 
-        // Remove glow effect after animation
-        setTimeout(() => {
-          registerDiv.classList.remove("register-glow");
-        }, 1000);
+          // Remove glow effect after animation
+          setTimeout(() => {
+            registerDiv.classList.remove("register-glow");
+          }, 1000);
+        }
       }
     };
 
@@ -576,8 +579,6 @@ document.addEventListener("DOMContentLoaded", function () {
     updateRegister("mdr", data.mdr);
     updateRegister("ir", data.ir);
     updateRegister("nf", data.nf);
-    updateRegister("instruction", data.instruction);
-    updateRegister("comments", data.comments);
 
     // Update RAM if provided
     if (data.ram) {
