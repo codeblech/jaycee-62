@@ -80,41 +80,44 @@
     </div>
 
     <div class="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4">
-        <!-- Code Editor Section -->
-        <div class="col-span-1 lg:col-span-4 bg-gray-800 p-4 rounded-lg">
-            <h2 class="text-white text-xl mb-4">Code Editor <span id="unsavedIndicator"
-                    class="text-yellow-400 text-sm hidden">*unsaved changes</span></h2>
-            <div class="mb-4">
-                <select id="sampleCodeSelect" class="w-full p-2 bg-gray-700 text-white rounded">
-                    <option value="">Select a sample program...</option>
-                </select>
+        <!-- Code Editor and RAM Section Column -->
+        <div class="col-span-1 lg:col-span-4 flex flex-col gap-4 h-[calc(100vh-2rem)]">
+            <!-- Code Editor Section -->
+            <div class="bg-gray-800 p-4 rounded-lg flex-1 flex flex-col min-h-0">
+                <h2 class="text-white text-xl mb-4">Code Editor <span id="unsavedIndicator"
+                        class="text-yellow-400 text-sm hidden">*unsaved changes</span></h2>
+                <div class="mb-4">
+                    <select id="sampleCodeSelect" class="w-full p-2 bg-gray-700 text-white rounded">
+                        <option value="">Select a sample program...</option>
+                    </select>
+                </div>
+                <textarea id="codeEditor"
+                    class="w-full flex-1 p-2 font-mono text-lg bg-gray-700 text-white rounded overflow-y-auto"></textarea>
+                <button id="submitCode"
+                    class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full lg:w-auto">Submit
+                    Code</button>
             </div>
-            <textarea id="codeEditor"
-                class="w-full h-64 md:h-96 p-2 font-mono text-lg bg-gray-700 text-white rounded"></textarea>
-            <button id="submitCode"
-                class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full lg:w-auto">Submit
-                Code</button>
-        </div>
 
-        <!-- RAM Section -->
-        <div class="col-span-1 lg:col-span-3 bg-gray-800 p-4 rounded-lg">
-            <h2 class="text-white text-xl mb-4">RAM</h2>
-            <div class="bg-gray-700 p-2 rounded h-64 md:h-96 overflow-y-auto hide-scrollbar">
-                <table id="ramTable" class="w-full text-white">
-                    <thead>
-                        <tr>
-                            <th class="text-left px-4 py-2 w-1/4">Address</th>
-                            <th class="text-left px-4 py-2 w-1/3">Label</th>
-                            <th class="text-left px-4 py-2 w-1/3">Value</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+            <!-- RAM Section -->
+            <div class="bg-gray-800 p-4 rounded-lg flex-1 flex flex-col min-h-0">
+                <h2 class="text-white text-xl mb-4">RAM</h2>
+                <div class="flex-1 bg-gray-700 p-2 rounded overflow-y-auto hide-scrollbar">
+                    <table id="ramTable" class="w-full text-white">
+                        <thead>
+                            <tr>
+                                <th class="text-left px-4 py-2 w-1/4">Address</th>
+                                <th class="text-left px-4 py-2 w-1/3">Label</th>
+                                <th class="text-left px-4 py-2 w-1/3">Value</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
         <!-- Registers Section -->
-        <div class="col-span-1 lg:col-span-5 bg-gray-800 p-4 rounded-lg">
+        <div class="col-span-1 lg:col-span-8 bg-gray-800 p-4 rounded-lg">
             <h2 class="text-white text-xl mb-4">Registers</h2>
             <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 <div class="register p-2 rounded">
