@@ -631,33 +631,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // Visualization modal functionality
-  const visualizeBtn = document.getElementById("visualizeBtn");
-  const visualizeModal = document.getElementById("visualizeModal");
-  const closeVisualize = document.getElementById("closeVisualize");
-
-  visualizeBtn.addEventListener("click", () => {
-    visualizeModal.classList.remove("hidden");
-  });
-
-  closeVisualize.addEventListener("click", () => {
-    visualizeModal.classList.add("hidden");
-  });
-
-  visualizeModal.addEventListener("click", (e) => {
-    if (e.target === visualizeModal) {
-      visualizeModal.classList.add("hidden");
-    }
-  });
-
-  // Add Escape key handler for visualize modal
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && !visualizeModal.classList.contains("hidden")) {
-      visualizeModal.classList.add("hidden");
-    }
-  });
-
-  // Add this helper function to determine components based on transfer text
+  // Remove visualization modal code and keep only the helper functions
   function getComponentsForTransfer(transfer) {
     const parts = transfer.split("←").map((p) => p.trim());
     const components = [];
@@ -684,7 +658,6 @@ document.addEventListener("DOMContentLoaded", function () {
     return components;
   }
 
-  // Add this helper function to determine bus lines based on transfer text
   function getBusForTransfer(transfer) {
     const parts = transfer.split("←").map((p) => p.trim());
 

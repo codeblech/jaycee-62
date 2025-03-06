@@ -152,58 +152,10 @@
                 </div>
             </div>
 
-            <!-- Control Buttons -->
-            <div class="flex flex-row gap-2 justify-end">
-                <button id="step" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Step</button>
-                <button id="run" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Run All</button>
-                <button id="reset" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Reset</button>
-                <button id="aiAssist"
-                    class="bg-[#2E2D2A] text-white px-4 py-2 rounded hover:bg-[#3E3D3A] flex items-center justify-center gap-2">
-                    <img src="/static/svg/claude-ai-icon.svg" alt="AI" class="w-6 h-6">
-                    <span>Magic</span>
-                </button>
-                <button id="visualizeBtn" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">
-                    Visualize
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Add AI explanation modal -->
-    <div id="aiModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
-        <div class="bg-gray-800 p-6 rounded-lg max-w-4xl max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-white text-2xl font-bold">AI Analysis</h2>
-                <button id="closeAi" class="text-gray-400 hover:text-white">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-            <div id="aiExplanation" class="text-white whitespace-pre-line"></div>
-        </div>
-    </div>
-
-    <!-- Add this after the AI modal div -->
-    <div id="aiLoading" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
-        <div class="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
-    </div>
-
-    <!-- Replace the existing visualizeModal div -->
-    <div id="visualizeModal"
-        class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm hidden flex items-center justify-center z-50">
-        <div class="bg-gray-800 p-4 rounded-lg w-[95vw] h-[90vh] relative">
-            <button id="closeVisualize" class="absolute top-2 right-2 text-gray-400 hover:text-white z-10">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
-            <div class="w-full h-full flex gap-6">
+            <!-- Visualization Section -->
+            <div class="bg-gray-800 p-4 rounded-lg flex gap-6">
                 <!-- SVG Container (Left Side) -->
-                <div class="w-2/3 h-full flex items-center justify-center">
+                <div class="w-2/3 flex items-center justify-center">
                     <svg width="302" height="268" viewBox="0 0 302 268" fill="none" xmlns="http://www.w3.org/2000/svg"
                         class="w-full h-full p-4" style="object-fit: contain;">
                         <rect width="302" height="268" fill="#1F2937" />
@@ -422,11 +374,10 @@
                             d="M235.103 101V95.1818H237.137C237.542 95.1818 237.877 95.2519 238.14 95.392C238.403 95.5303 238.599 95.7169 238.728 95.9517C238.857 96.1847 238.921 96.4432 238.921 96.7273C238.921 96.9773 238.877 97.1837 238.788 97.3466C238.701 97.5095 238.585 97.6383 238.441 97.733C238.299 97.8277 238.145 97.8977 237.978 97.9432V98C238.156 98.0114 238.335 98.0739 238.515 98.1875C238.695 98.3011 238.845 98.464 238.967 98.6761C239.088 98.8883 239.148 99.1477 239.148 99.4545C239.148 99.7462 239.082 100.009 238.95 100.241C238.817 100.474 238.608 100.659 238.322 100.795C238.036 100.932 237.664 101 237.205 101H235.103ZM235.808 100.375H237.205C237.665 100.375 237.992 100.286 238.185 100.108C238.38 99.928 238.478 99.7102 238.478 99.4545C238.478 99.2576 238.428 99.0758 238.327 98.9091C238.227 98.7405 238.084 98.6061 237.898 98.5057C237.713 98.4034 237.493 98.3523 237.239 98.3523H235.808V100.375ZM235.808 97.7386H237.114C237.326 97.7386 237.518 97.697 237.688 97.6136C237.861 97.5303 237.997 97.4129 238.097 97.2614C238.2 97.1098 238.251 96.9318 238.251 96.7273C238.251 96.4716 238.162 96.2547 237.984 96.0767C237.806 95.8968 237.523 95.8068 237.137 95.8068H235.808V97.7386Z"
                             fill="#B4F99D" />
                     </svg>
-
                 </div>
 
                 <!-- Instructions List (Right Side) -->
-                <div class="w-2/5 h-full bg-gray-700 rounded-lg p-4 overflow-hidden flex flex-col">
+                <div class="w-2/5 bg-gray-700 rounded-lg p-4 overflow-hidden flex flex-col">
                     <h3 class="text-white text-xl font-semibold mb-4">Program Instructions</h3>
                     <div id="programInstructions" class="overflow-y-auto hide-scrollbar flex-1">
                         <!-- Instructions will be populated dynamically -->
@@ -436,7 +387,41 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Control Buttons -->
+            <div class="flex flex-row gap-2 justify-end">
+                <button id="step" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Step</button>
+                <button id="run" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Run All</button>
+                <button id="reset" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Reset</button>
+                <button id="aiAssist"
+                    class="bg-[#2E2D2A] text-white px-4 py-2 rounded hover:bg-[#3E3D3A] flex items-center justify-center gap-2">
+                    <img src="/static/svg/claude-ai-icon.svg" alt="AI" class="w-6 h-6">
+                    <span>Magic</span>
+                </button>
+            </div>
         </div>
+    </div>
+
+    <!-- Add AI explanation modal -->
+    <div id="aiModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
+        <div class="bg-gray-800 p-6 rounded-lg max-w-4xl max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-white text-2xl font-bold">AI Analysis</h2>
+                <button id="closeAi" class="text-gray-400 hover:text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div id="aiExplanation" class="text-white whitespace-pre-line"></div>
+        </div>
+    </div>
+
+    <!-- Add this after the AI modal div -->
+    <div id="aiLoading" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
+        <div class="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
     </div>
 
     <script src="/static/js/frontend.js"></script>
