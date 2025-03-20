@@ -602,6 +602,21 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       }
     }
+
+    // Update current instruction highlighting
+    if (data.ir) {
+      // Remove previous highlighting
+      const allInstructions = document.querySelectorAll('.instructions-list .mb-6');
+      allInstructions.forEach(instruction => instruction.classList.remove('current-instruction'));
+      
+      // Add highlighting to current instruction
+      if (allInstructions[data.ir]) {
+        allInstructions[data.ir].classList.add('current-instruction');
+        
+        // Scroll the instruction into view
+        allInstructions[data.ir].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
   }
 
   // Help modal functionality

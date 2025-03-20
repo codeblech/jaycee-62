@@ -105,3 +105,8 @@
     overflow-y: auto;
     padding-right: 0.5rem;
 }
+
+.current-instruction {
+    background-color: rgba(59, 130, 246, 0.1);
+    border-left: 3px solid #3b82f6;
+}
