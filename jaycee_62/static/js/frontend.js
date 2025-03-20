@@ -374,20 +374,20 @@ document.addEventListener("DOMContentLoaded", function () {
   function getInstructionSteps(instruction) {
     const steps = {
       LDA: [
-        { text: "MAR ← IR | Get operand address", components: ["ir", "mar"], bus: ["ir-to-main", "mar-to-main"] },
+        { text: "MAR ← IR | Get operand address", components: ["ir", "mar"], bus: ["ir-to-main", "mar-to-main", "bus-5", "bus-6", "bus-7", "bus-8", "bus-9"] },
         {
           text: "MDR ← RAM(MAR) | Read operand from memory",
           components: ["mar", "mdr"],
           bus: ["ram-to-mdr-horizontal", "ram-to-mdr-vertical-up", "ram-to-mdr-vertical-down"],
         },
-        { text: "ACC ← MDR | Load operand into ACC", components: ["mdr", "acc"], bus: ["mdr-to-main", "acc-to-main"] },
+        { text: "ACC ← MDR | Load operand into ACC", components: ["mdr", "acc"], bus: ["mdr-to-main", "acc-to-main", "bus-2", "bus-3","bus-4", "bus-5", "bus-6", "bus-7", "bus-8", "bus-9", "bus-10", "bus-11"] },
       ],
       STA: [
-        { text: "MAR ← IR | Get target address", components: ["ir", "mar"], bus: ["ir-to-main", "mar-to-main"] },
+        { text: "MAR ← IR | Get target address", components: ["ir", "mar"], bus: ["ir-to-main", "mar-to-main", "bus-5", "bus-6", "bus-7", "bus-8", "bus-9"] },
         {
           text: "MDR ← ACC | Prepare ACC value for storage",
           components: ["acc", "mdr"],
-          bus: ["acc-to-main", "mdr-to-main"],
+          bus: ["acc-to-main", "mdr-to-main", "bus-2", "bus-3","bus-4", "bus-5", "bus-6", "bus-7", "bus-8", "bus-9", "bus-10", "bus-11"],
         },
         {
           text: "RAM(MAR) ← MDR | Store ACC value in memory",
@@ -399,7 +399,7 @@ document.addEventListener("DOMContentLoaded", function () {
         {
           text: "ALU ← ACC + B | Add B to ACC",
           components: ["acc", "b"],
-          bus: ["acc-to-main", "b-to-main", "acc-to-alu"],
+          bus: ["acc-to-main", "b-to-main", "acc-to-alu", "bus-2", "bus-3","bus-4", "bus-5", "bus-6", "bus-7"],
         },
         { text: "ACC ← ALU | Store result in ACC", components: ["acc"], bus: ["acc-to-alu"] },
         { text: "- | -", components: [], bus: [] },
@@ -408,18 +408,18 @@ document.addEventListener("DOMContentLoaded", function () {
         {
           text: "ALU ← ACC - B | Subtract B from ACC",
           components: ["acc", "b"],
-          bus: ["acc-to-main", "b-to-main", "acc-to-alu"],
+          bus: ["acc-to-main", "b-to-main", "acc-to-alu", "bus-2", "bus-3","bus-4", "bus-5", "bus-6", "bus-7"],
         },
         { text: "ACC ← ALU | Store result in ACC", components: ["acc"], bus: ["acc-to-alu"] },
         { text: "- | -", components: [], bus: [] },
       ],
       MBA: [
-        { text: "B ← ACC | Copy ACC to B register", components: ["acc", "b"], bus: ["acc-to-main", "b-to-main"] },
+        { text: "B ← ACC | Copy ACC to B register", components: ["acc", "b"], bus: ["acc-to-main", "b-to-main", "bus-2", "bus-3","bus-4", "bus-5", "bus-6", "bus-7"] },
         { text: "- | -", components: [], bus: [] },
         { text: "- | -", components: [], bus: [] },
       ],
       JMP: [
-        { text: "PC ← IR | Jump to address in IR", components: ["ir", "pc"], bus: ["ir-to-main", "mar-to-main"] },
+        { text: "PC ← IR | Jump to address in IR", components: ["ir", "pc"], bus: ["ir-to-main", "pc-to-main", "bus-3","bus-4", "bus-5", "bus-6", "bus-7", "bus-8", "bus-9"] },
         { text: "- | -", components: [], bus: [] },
         { text: "- | -", components: [], bus: [] },
       ],
@@ -427,7 +427,7 @@ document.addEventListener("DOMContentLoaded", function () {
         {
           text: "PC ← IR if NF set | Jump if negative flag is set",
           components: ["nf", "ir", "pc"],
-          bus: ["ir-to-main", "mar-to-main"],
+          bus: ["ir-to-main", "pc-to-main", "bus-3","bus-4", "bus-5", "bus-6", "bus-7", "bus-8", "bus-9"],
         },
         { text: "- | -", components: [], bus: [] },
         { text: "- | -", components: [], bus: [] },
@@ -441,6 +441,17 @@ document.addEventListener("DOMContentLoaded", function () {
     // Reset all components and bus segments
     const allComponents = ["pc", "mar", "mdr", "ir", "acc", "b", "nf"];
     const allBusSegments = [
+      "bus-1",
+      "bus-2",
+      "bus-3",
+      "bus-4",
+      "bus-5",
+      "bus-6",
+      "bus-7",
+      "bus-8",
+      "bus-9",
+      "bus-10",
+      "bus-11",
       "mar-to-main",
       "ram-to-mdr-horizontal",
       "ram-to-mdr-vertical-up",
@@ -661,18 +672,19 @@ document.addEventListener("DOMContentLoaded", function () {
   function getBusForTransfer(transfer) {
     const parts = transfer.split("←").map((p) => p.trim());
 
+    // Handle MDR ← RAM(MAR) transfers
     if (transfer.includes("RAM(MAR)")) {
       return ["ram-to-mdr-horizontal", "ram-to-mdr-vertical-up", "ram-to-mdr-vertical-down"];
     }
 
     // Handle MAR ← PC transfer
     if (parts[0] === "MAR" && parts[1] === "PC") {
-      return ["pc-to-main", "mar-to-main"];
+      return ["pc-to-main", "mar-to-main", "bus-3", "bus-4", "bus-5"];
     }
 
     // Handle IR ← MDR transfer
     if (parts[0] === "IR" && parts[1] === "MDR") {
-      return ["mdr-to-main", "ir-to-main"];
+      return ["mdr-to-main", "ir-to-main", "bus-9", "bus-10", "bus-11"];
     }
 
     return ["mar-to-main"]; // Default bus line
