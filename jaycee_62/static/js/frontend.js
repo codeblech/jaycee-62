@@ -5,6 +5,10 @@ document.addEventListener("DOMContentLoaded", function () {
   const unsavedIndicator = document.getElementById("unsavedIndicator");
   const executionHistory = [];
   let currentHighlightedMicroOp = null;
+  const svgContainer = document.querySelector('.svg-container');
+
+  // Initialize SVG container in washed-out state
+  svgContainer.classList.add('washed-out');
 
   codeEditor.addEventListener("input", function () {
     if (this.value !== lastSavedCode) {
@@ -528,6 +532,14 @@ document.addEventListener("DOMContentLoaded", function () {
       comments: data.comments,
     });
 
+    // Wash out SVG when stepping
+    svgContainer.classList.add('washed-out');
+    // Clear micro-op highlight when stepping
+    if (currentHighlightedMicroOp) {
+      currentHighlightedMicroOp.classList.remove('micro-op-highlighted');
+      currentHighlightedMicroOp = null;
+    }
+
     updateUI(data);
   }
 
@@ -540,6 +552,15 @@ document.addEventListener("DOMContentLoaded", function () {
       alert(data.error);
       return;
     }
+
+    // Wash out SVG when running all
+    svgContainer.classList.add('washed-out');
+    // Clear micro-op highlight when running all
+    if (currentHighlightedMicroOp) {
+      currentHighlightedMicroOp.classList.remove('micro-op-highlighted');
+      currentHighlightedMicroOp = null;
+    }
+
     if (data.results.length > 0) {
       updateUI(data.results[data.results.length - 1]);
     }
@@ -551,6 +572,14 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     lastSavedCode = codeEditor.value; // Update saved code
     unsavedIndicator.classList.add("hidden"); // Hide indicator
+    
+    // Wash out SVG and clear micro-op highlight on reset
+    svgContainer.classList.add('washed-out');
+    if (currentHighlightedMicroOp) {
+      currentHighlightedMicroOp.classList.remove('micro-op-highlighted');
+      currentHighlightedMicroOp = null;
+    }
+
     updateUI({
       pc: "",
       acc: "",
@@ -715,20 +744,24 @@ document.addEventListener("DOMContentLoaded", function () {
     return ["mar-to-main"]; // Default bus line
   }
 
-  // Add this helper function to handle micro-operation clicks
+  // Modify the handleMicroOpClick function
   function handleMicroOpClick(element, highlightCallback) {
     // Remove highlight from previous micro-op if it exists and is different
     if (currentHighlightedMicroOp && currentHighlightedMicroOp !== element) {
-        currentHighlightedMicroOp.classList.remove('micro-op-highlighted');
+      currentHighlightedMicroOp.classList.remove('micro-op-highlighted');
     }
     
     // Toggle highlight on current micro-op
     if (currentHighlightedMicroOp === element) {
-        element.classList.remove('micro-op-highlighted');
-        currentHighlightedMicroOp = null;
+      element.classList.remove('micro-op-highlighted');
+      currentHighlightedMicroOp = null;
+      // Wash out SVG when no micro-op is highlighted
+      svgContainer.classList.add('washed-out');
     } else {
-        element.classList.add('micro-op-highlighted');
-        currentHighlightedMicroOp = element;
+      element.classList.add('micro-op-highlighted');
+      currentHighlightedMicroOp = element;
+      // Show SVG clearly when a micro-op is highlighted
+      svgContainer.classList.remove('washed-out');
     }
     
     // Call the highlight callback

@@ -88,9 +88,16 @@
     justify-content: center;
 }
 
+.svg-container.washed-out svg {
+    opacity: 0.3;
+    transition: opacity 0.2s ease-in-out;
+}
+
 .svg-container svg {
     max-height: 100%;
     width: auto;
+    opacity: 1;
+    transition: opacity 0.2s ease-in-out;
 }
 
 /* Instructions list styles */
@@ -107,8 +114,8 @@
 }
 
 .current-instruction {
-    background-color: rgba(59, 130, 246, 0.1);
-    border: 3px solid rgba(59, 130, 246, 0.2);
+    /* background-color: rgba(59, 130, 246, 0.1);
+    border: 3px solid rgba(59, 130, 246, 0.2); */
     border-radius: 0.5rem;
 }
 
