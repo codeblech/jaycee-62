@@ -1,12 +1,12 @@
 .register {
     background-color: #374151;
     color: #ffffff;
-    min-height: 5rem;
+    min-height: 4rem;
     transition: box-shadow 0.3s ease-in-out;
 }
 
 .register-large {
-    min-height: 8rem;
+    min-height: 6rem;
 }
 
 .hide-scrollbar {
@@ -76,8 +76,8 @@
 
 /* Visualization section styles */
 .visualization-section {
-    height: calc(100vh - 16rem); /* Account for registers, controls, and padding */
-    min-height: 400px;
+    height: calc(100vh - 12rem); /* Account for registers, controls, and padding */
+    min-height: 350px;
 }
 
 /* SVG container styles */
