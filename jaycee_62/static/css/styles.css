@@ -111,3 +111,17 @@
     border: 3px solid rgba(59, 130, 246, 0.2);
     border-radius: 0.5rem;
 }
+
+.micro-op-highlighted {
+    background-color: rgba(139, 92, 246, 0.1);
+    border-left: 3px solid rgb(139, 92, 246);
+}
+
+.micro-op-row {
+    transition: all 0.2s ease-in-out;
+}
+
+.micro-op-row:hover {
+    background-color: rgba(139, 92, 246, 0.05);
+    cursor: pointer;
+}

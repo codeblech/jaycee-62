@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const codeEditor = document.getElementById("codeEditor");
   const unsavedIndicator = document.getElementById("unsavedIndicator");
   const executionHistory = [];
+  let currentHighlightedMicroOp = null;
 
   codeEditor.addEventListener("input", function () {
     if (this.value !== lastSavedCode) {
@@ -257,6 +258,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function updateProgramInstructions(code) {
     const programInstructions = document.getElementById("programInstructions");
     programInstructions.innerHTML = ""; // Clear existing content
+    currentHighlightedMicroOp = null; // Reset highlighted micro-op when instructions are updated
 
     if (!code.trim()) {
       programInstructions.innerHTML = `
@@ -339,7 +341,7 @@ document.addEventListener("DOMContentLoaded", function () {
       // Add all steps to the table
       allSteps.forEach((step, index) => {
         const tr = document.createElement("tr");
-        tr.className = "cursor-pointer hover:bg-gray-700";
+        tr.className = "micro-op-row";
 
         if ("text" in step) {
           // Handle instruction-specific steps
@@ -349,7 +351,10 @@ document.addEventListener("DOMContentLoaded", function () {
             <td class="py-1 font-mono">${transfer}</td>
             <td class="py-1">${description}</td>
           `;
-          tr.onclick = () => highlightComponents(step.components, step.bus);
+          tr.onclick = function(e) {
+            e.stopPropagation();
+            handleMicroOpClick(this, () => highlightComponents(step.components, step.bus));
+          };
         } else {
           // Handle fetch steps or dash steps
           tr.innerHTML = `
@@ -358,8 +363,13 @@ document.addEventListener("DOMContentLoaded", function () {
             <td class="py-1">${step.description}</td>
           `;
           if (step.transfer !== "-") {
-            tr.onclick = () =>
-              highlightComponents(getComponentsForTransfer(step.transfer), getBusForTransfer(step.transfer));
+            tr.onclick = function(e) {
+              e.stopPropagation();
+              handleMicroOpClick(this, () => highlightComponents(
+                getComponentsForTransfer(step.transfer),
+                getBusForTransfer(step.transfer)
+              ));
+            };
           }
         }
         tbody.appendChild(tr);
@@ -605,7 +615,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Update current instruction highlighting
     if (data.ir) {
-      // Remove previous highlighting
+      // Remove previous instruction highlighting but preserve micro-op highlighting
       const allInstructions = document.querySelectorAll('.instructions-list .mb-6');
       allInstructions.forEach(instruction => instruction.classList.remove('current-instruction'));
       
@@ -703,5 +713,25 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     return ["mar-to-main"]; // Default bus line
+  }
+
+  // Add this helper function to handle micro-operation clicks
+  function handleMicroOpClick(element, highlightCallback) {
+    // Remove highlight from previous micro-op if it exists and is different
+    if (currentHighlightedMicroOp && currentHighlightedMicroOp !== element) {
+        currentHighlightedMicroOp.classList.remove('micro-op-highlighted');
+    }
+    
+    // Toggle highlight on current micro-op
+    if (currentHighlightedMicroOp === element) {
+        element.classList.remove('micro-op-highlighted');
+        currentHighlightedMicroOp = null;
+    } else {
+        element.classList.add('micro-op-highlighted');
+        currentHighlightedMicroOp = element;
+    }
+    
+    // Call the highlight callback
+    highlightCallback();
   }
 });
