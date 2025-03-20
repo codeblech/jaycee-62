@@ -108,5 +108,6 @@
 
 .current-instruction {
     background-color: rgba(59, 130, 246, 0.1);
-    border-left: 3px solid #3b82f6;
+    border: 3px solid #3b82f6;
+    border-radius: 0.5rem;
 }
