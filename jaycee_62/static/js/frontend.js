@@ -572,7 +572,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     lastSavedCode = codeEditor.value; // Update saved code
     unsavedIndicator.classList.add("hidden"); // Hide indicator
-    
+
     // Wash out SVG and clear micro-op highlight on reset
     svgContainer.classList.add('washed-out');
     if (currentHighlightedMicroOp) {
@@ -647,11 +647,11 @@ document.addEventListener("DOMContentLoaded", function () {
       // Remove previous instruction highlighting but preserve micro-op highlighting
       const allInstructions = document.querySelectorAll('.instructions-list .mb-6');
       allInstructions.forEach(instruction => instruction.classList.remove('current-instruction'));
-      
+
       // Add highlighting to current instruction
       if (allInstructions[data.ir]) {
         allInstructions[data.ir].classList.add('current-instruction');
-        
+
         // Scroll the instruction into view
         allInstructions[data.ir].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       }
@@ -664,17 +664,23 @@ document.addEventListener("DOMContentLoaded", function () {
   const closeHelp = document.getElementById("closeHelp");
 
   helpButton.addEventListener("click", () => {
+    let simulator = document.getElementById("simulator");
+    simulator.classList.add("hidden");
     helpModal.classList.remove("hidden");
   });
 
   closeHelp.addEventListener("click", () => {
     helpModal.classList.add("hidden");
+    let simulator = document.getElementById("simulator");
+    simulator.classList.remove("hidden");
   });
 
   // Close modal when clicking outside
   helpModal.addEventListener("click", (e) => {
     if (e.target === helpModal) {
       helpModal.classList.add("hidden");
+      let simulator = document.getElementById("simulator");
+      simulator.classList.remove("hidden");
     }
   });
 
@@ -682,6 +688,8 @@ document.addEventListener("DOMContentLoaded", function () {
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && !helpModal.classList.contains("hidden")) {
       helpModal.classList.add("hidden");
+      let simulator = document.getElementById("simulator");
+      simulator.classList.remove("hidden");
     }
   });
 
@@ -750,7 +758,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (currentHighlightedMicroOp && currentHighlightedMicroOp !== element) {
       currentHighlightedMicroOp.classList.remove('micro-op-highlighted');
     }
-    
+
     // Toggle highlight on current micro-op
     if (currentHighlightedMicroOp === element) {
       element.classList.remove('micro-op-highlighted');
@@ -763,7 +771,7 @@ document.addEventListener("DOMContentLoaded", function () {
       // Show SVG clearly when a micro-op is highlighted
       svgContainer.classList.remove('washed-out');
     }
-    
+
     // Call the highlight callback
     highlightCallback();
   }
